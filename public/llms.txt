@@ -1,0 +1,39 @@
+# Agent Store
+
+> The App Store for AI Agents. Discover, compare, and connect to specialized AI agents for any task.
+
+## What is Agent Store?
+
+Agent Store is a curated marketplace for AI agents. It lets users browse, search, and compare AI agents across categories like Developer Tools, Productivity, Research, Writing, and more.
+
+## MCP Endpoint
+
+The site exposes a Model Context Protocol (MCP) server for AI-native access.
+
+- Discovery: GET /.well-known/mcp.json
+- Transport: HTTP at /api/mcp
+- Protocol version: 2024-11-05
+
+## MCP Tools
+
+- search_agents: Search the Agent Store by name, capability, tool, or category.
+- get_agent: Get full details about a specific AI agent by slug.
+- list_categories: List all available agent categories.
+- find_agent_for_task: Describe a task and get the best matching agents ranked by relevance.
+
+## REST API Endpoints
+
+- GET /api/agents — List and search agents. Query params: q, category, capability, tool, pricing, limit, offset.
+- GET /api/agents/[slug] — Get a single agent by slug.
+- GET /api/categories — List all categories.
+- GET /api/mcp — MCP protocol endpoint (HTTP transport).
+
+## Pages
+
+- / — Homepage with featured agents
+- /discover — Browse all agents
+- /search — Search agents
+- /category/[slug] — Agents filtered by category
+- /agent/[slug] — Individual agent detail page
+- /mcp — Information about the MCP integration
+- /submit — Submit a new agent to the store
