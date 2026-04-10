@@ -67,27 +67,27 @@ function ResultCard({ agent, score }: { agent: Agent; score: number }) {
 
   return (
     <Link href={`/agent/${agent.slug}`} className="block group">
-      <div className="bg-[#1c1c1e] rounded-2xl p-5 border border-white/[0.06] hover:border-[#0A84FF]/30 transition-all">
+      <div className="bg-[#0f1011] rounded-2xl p-5 border border-[rgba(255,255,255,0.05)] hover:border-[#5e6ad2]/30 transition-all">
         <div className="flex items-start gap-4">
           <AgentIcon name={agent.name} websiteUrl={agent.website_url} size="md" />
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
               <h3 className="font-semibold text-white text-[15px] truncate">{agent.name}</h3>
               {category && (
-                <span className="text-[11px] text-gray-500 bg-white/5 px-2 py-0.5 rounded-full flex-shrink-0">
+                <span className="text-[11px] text-[#8a8f98] bg-white/5 px-2 py-0.5 rounded-full flex-shrink-0">
                   {category.icon} {category.name}
                 </span>
               )}
             </div>
-            <p className="text-[13px] text-gray-400 mt-1">{agent.tagline}</p>
+            <p className="text-[13px] text-[#8a8f98] mt-1">{agent.tagline}</p>
             <div className="flex flex-wrap gap-1.5 mt-2">
               {agent.capabilities.slice(0, 3).map((cap) => (
-                <span key={cap} className="text-[11px] text-gray-500 bg-white/5 px-2 py-0.5 rounded-full">{cap}</span>
+                <span key={cap} className="text-[11px] text-[#8a8f98] bg-white/5 px-2 py-0.5 rounded-full">{cap}</span>
               ))}
             </div>
             <div className="flex items-center justify-between mt-3">
-              <span className="text-[12px] text-[#0A84FF] font-medium">{priceLabel}</span>
-              <span className="text-[11px] text-gray-600">{Math.round((score / 50) * 100)}% match</span>
+              <span className="text-[12px] text-[#5e6ad2] font-medium">{priceLabel}</span>
+              <span className="text-[11px] text-[#62666d]">{Math.round((score / 50) * 100)}% match</span>
             </div>
           </div>
         </div>
@@ -131,16 +131,16 @@ export default function FindPage() {
       {/* Hero */}
       {!searched && (
         <div className="text-center mb-10">
-          <div className="inline-flex items-center gap-2 bg-[#0A84FF]/15 text-[#0A84FF] text-xs font-semibold px-4 py-1.5 rounded-full mb-5">
+          <div className="inline-flex items-center gap-2 bg-[#5e6ad2]/15 text-[#5e6ad2] text-xs font-semibold px-4 py-1.5 rounded-full mb-5">
             <Sparkles className="w-3.5 h-3.5" />
             AI-Powered Discovery
           </div>
           <h1 className="text-3xl md:text-4xl font-bold text-white leading-tight">
             Describe what you need.
             <br />
-            <span className="text-gray-400">We&apos;ll find the right agent.</span>
+            <span className="text-[#8a8f98]">We&apos;ll find the right agent.</span>
           </h1>
-          <p className="text-gray-500 mt-3 max-w-lg mx-auto">
+          <p className="text-[#8a8f98] mt-3 max-w-lg mx-auto">
             Tell us your task in plain language. We&apos;ll match you with the best AI agents based on capabilities, tools, and what they&apos;re built for.
           </p>
         </div>
@@ -150,27 +150,27 @@ export default function FindPage() {
       <div className="relative">
         <form onSubmit={(e) => { e.preventDefault(); handleSearch(); }}>
           <div className="relative">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-500" />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8a8f98]" />
             <input
               type="text"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Describe your task... e.g. 'automate customer support for my e-commerce store'"
-              className="w-full h-14 pl-12 pr-28 bg-[#1c1c1e] rounded-2xl text-[15px] text-white placeholder:text-gray-600 outline-none focus:ring-2 focus:ring-[#0A84FF]/30 border border-white/[0.06]"
+              className="w-full h-14 pl-12 pr-28 bg-[#0f1011] rounded-2xl text-[15px] text-white placeholder:text-[#62666d] outline-none focus:ring-2 focus:ring-[#5e6ad2]/30 border border-[rgba(255,255,255,0.05)]"
             />
             <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
               <button
                 type="button"
                 onClick={() => setShowFilters(!showFilters)}
                 className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${
-                  activeFilterCount > 0 ? "bg-[#0A84FF]/15 text-[#0A84FF]" : "bg-white/5 text-gray-500 hover:text-white"
+                  activeFilterCount > 0 ? "bg-[#5e6ad2]/15 text-[#5e6ad2]" : "bg-white/5 text-[#8a8f98] hover:text-white"
                 }`}
               >
                 <SlidersHorizontal className="w-4 h-4" />
               </button>
               <button
                 type="submit"
-                className="bg-[#0A84FF] text-white font-semibold px-4 h-10 rounded-xl text-sm hover:bg-[#409CFF] transition-colors"
+                className="bg-[#5e6ad2] text-white font-semibold px-4 h-10 rounded-xl text-sm hover:bg-[#6d78d5] transition-colors"
               >
                 Find
               </button>
@@ -180,16 +180,16 @@ export default function FindPage() {
 
         {/* Filters */}
         {showFilters && (
-          <div className="mt-3 bg-[#1c1c1e] rounded-2xl p-4 border border-white/[0.06]">
+          <div className="mt-3 bg-[#0f1011] rounded-2xl p-4 border border-[rgba(255,255,255,0.05)]">
             <div className="flex items-center justify-between mb-3">
               <span className="text-sm font-medium text-white">Filters</span>
               {activeFilterCount > 0 && (
-                <button onClick={clearFilters} className="text-xs text-[#0A84FF] hover:underline">Clear all</button>
+                <button onClick={clearFilters} className="text-xs text-[#5e6ad2] hover:underline">Clear all</button>
               )}
             </div>
             <div className="grid grid-cols-3 gap-3">
               <div>
-                <label className="text-[11px] text-gray-500 uppercase tracking-wider font-medium">Category</label>
+                <label className="text-[11px] text-[#8a8f98] uppercase tracking-wider font-medium">Category</label>
                 <select
                   value={filters.category || ""}
                   onChange={(e) => setFilters({ ...filters, category: e.target.value || undefined })}
@@ -202,7 +202,7 @@ export default function FindPage() {
                 </select>
               </div>
               <div>
-                <label className="text-[11px] text-gray-500 uppercase tracking-wider font-medium">Pricing</label>
+                <label className="text-[11px] text-[#8a8f98] uppercase tracking-wider font-medium">Pricing</label>
                 <select
                   value={filters.pricing || ""}
                   onChange={(e) => setFilters({ ...filters, pricing: e.target.value || undefined })}
@@ -216,13 +216,13 @@ export default function FindPage() {
                 </select>
               </div>
               <div>
-                <label className="text-[11px] text-gray-500 uppercase tracking-wider font-medium">Tool</label>
+                <label className="text-[11px] text-[#8a8f98] uppercase tracking-wider font-medium">Tool</label>
                 <input
                   type="text"
                   value={filters.tool || ""}
                   onChange={(e) => setFilters({ ...filters, tool: e.target.value || undefined })}
                   placeholder="e.g. Slack, API"
-                  className="w-full mt-1 h-9 px-3 bg-white/5 rounded-lg text-[13px] text-white placeholder:text-gray-600 border-none outline-none"
+                  className="w-full mt-1 h-9 px-3 bg-white/5 rounded-lg text-[13px] text-white placeholder:text-[#62666d] border-none outline-none"
                 />
               </div>
             </div>
@@ -233,13 +233,13 @@ export default function FindPage() {
       {/* Example queries */}
       {!searched && (
         <div className="mt-6">
-          <p className="text-[12px] text-gray-600 mb-3">Try one of these:</p>
+          <p className="text-[12px] text-[#62666d] mb-3">Try one of these:</p>
           <div className="flex flex-wrap gap-2">
             {exampleQueries.map((eq) => (
               <button
                 key={eq}
                 onClick={() => handleSearch(eq)}
-                className="text-[12px] text-gray-400 bg-white/5 px-3 py-1.5 rounded-full hover:bg-white/10 hover:text-white transition-colors text-left"
+                className="text-[12px] text-[#8a8f98] bg-white/5 px-3 py-1.5 rounded-full hover:bg-[rgba(255,255,255,0.08)] hover:text-white transition-colors text-left"
               >
                 {eq}
               </button>
@@ -252,25 +252,25 @@ export default function FindPage() {
       {searched && (
         <div className="mt-6">
           <div className="flex items-center justify-between mb-4">
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-[#8a8f98]">
               {results.length > 0
                 ? `${results.length} agent${results.length !== 1 ? "s" : ""} matched`
                 : "No agents matched your description"}
             </p>
             {results.length > 0 && (
-              <button onClick={() => { setSearched(false); setResults([]); setQuery(""); }} className="text-xs text-[#0A84FF] hover:underline">
+              <button onClick={() => { setSearched(false); setResults([]); setQuery(""); }} className="text-xs text-[#5e6ad2] hover:underline">
                 New search
               </button>
             )}
           </div>
 
           {results.length === 0 && (
-            <div className="text-center py-12 bg-[#1c1c1e] rounded-2xl border border-white/[0.06]">
-              <p className="text-gray-500">No agents found for that description.</p>
-              <p className="text-gray-600 text-sm mt-1">Try different words or broaden your search.</p>
+            <div className="text-center py-12 bg-[#0f1011] rounded-2xl border border-[rgba(255,255,255,0.05)]">
+              <p className="text-[#8a8f98]">No agents found for that description.</p>
+              <p className="text-[#62666d] text-sm mt-1">Try different words or broaden your search.</p>
               <button
                 onClick={() => { setSearched(false); setResults([]); }}
-                className="mt-4 text-[#0A84FF] text-sm font-medium hover:underline"
+                className="mt-4 text-[#5e6ad2] text-sm font-medium hover:underline"
               >
                 Try again
               </button>

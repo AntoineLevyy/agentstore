@@ -35,7 +35,7 @@ export function AgentIcon({ name, websiteUrl, size = "md", className = "" }: Age
   const logoUrl = getLogoUrl(websiteUrl);
 
   return (
-    <div className={`${sizeClasses[size]} rounded-[22.5%] bg-[#2c2c2e] flex-shrink-0 overflow-hidden shadow-sm flex items-center justify-center ${className}`}>
+    <div className={`${sizeClasses[size]} rounded-[8px] bg-[#0f1011] border border-[rgba(255,255,255,0.05)] flex-shrink-0 overflow-hidden flex items-center justify-center ${className}`}>
       {logoUrl && !imgError ? (
         <img
           src={logoUrl}
@@ -44,7 +44,7 @@ export function AgentIcon({ name, websiteUrl, size = "md", className = "" }: Age
           onError={() => setImgError(true)}
         />
       ) : (
-        <span className="font-bold text-gray-400">{name[0]}</span>
+        <span className="font-[510] text-[#62666d]">{name[0]}</span>
       )}
     </div>
   );

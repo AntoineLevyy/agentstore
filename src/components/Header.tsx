@@ -15,29 +15,29 @@ export function Header() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-50 bg-[#1c1c1e]/80 backdrop-blur-xl border-b border-white/10">
+    <header className="sticky top-0 z-50 bg-[#08090a]/80 backdrop-blur-xl border-b border-[rgba(255,255,255,0.05)]">
       <div className="max-w-[1200px] mx-auto px-5">
-        <div className="flex items-center justify-between h-14">
+        <div className="flex items-center justify-between h-12">
           <Link href="/" className="flex items-center gap-2">
             <img
               src="https://res.cloudinary.com/djklousbo/image/upload/v1775356040/logo_agentstore.png_fmokea.jpg"
               alt="Agent Store"
-              className="h-8 w-auto rounded-lg"
+              className="h-7 w-auto rounded-[4px]"
             />
-            <span className="font-semibold text-lg text-white">Agent Store</span>
+            <span className="font-medium text-[14px] text-[#f7f8f8] tracking-[-0.01em]">Agent Store</span>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-1">
+          <nav className="hidden md:flex items-center gap-0.5">
             {tabs.map((tab) => {
               const isActive = tab.href === "/" ? pathname === "/" : pathname.startsWith(tab.href);
               return (
                 <Link
                   key={tab.name}
                   href={tab.href}
-                  className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
+                  className={`px-3 py-1.5 rounded-[5px] text-[13px] font-[510] transition-all duration-[0.16s] ${
                     isActive
-                      ? "bg-[#0A84FF] text-white"
-                      : "text-gray-400 hover:text-white hover:bg-white/10"
+                      ? "bg-[rgba(255,255,255,0.05)] text-[#f7f8f8]"
+                      : "text-[#8a8f98] hover:text-[#d0d6e0] hover:bg-[rgba(255,255,255,0.03)]"
                   }`}
                 >
                   {tab.name}
@@ -48,9 +48,9 @@ export function Header() {
 
           <Link
             href="/search"
-            className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-white/15 transition-colors"
+            className="w-8 h-8 rounded-[6px] bg-[rgba(255,255,255,0.03)] flex items-center justify-center hover:bg-[rgba(255,255,255,0.05)] transition-all duration-[0.16s]"
           >
-            <Search className="w-4 h-4 text-gray-400" />
+            <Search className="w-3.5 h-3.5 text-[#8a8f98]" />
           </Link>
         </div>
       </div>

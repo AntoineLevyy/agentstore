@@ -12,23 +12,23 @@ function CopyButton({ text }: { text: string }) {
     setTimeout(() => setCopied(false), 2000);
   }
   return (
-    <button onClick={handleCopy} className="text-gray-500 hover:text-gray-300 transition-colors">
-      {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
+    <button onClick={handleCopy} className="text-[#8a8f98] hover:text-[#d0d6e0] transition-colors">
+      {copied ? <Check className="w-4 h-4 text-[#10b981]" /> : <Copy className="w-4 h-4" />}
     </button>
   );
 }
 
 function CodeBlock({ code, label }: { code: string; label?: string }) {
   return (
-    <div className="bg-[#0a0a0a] rounded-lg border border-white/[0.06] overflow-hidden">
+    <div className="bg-[#08090a] rounded-lg border border-[rgba(255,255,255,0.05)] overflow-hidden">
       {label && (
-        <div className="flex items-center justify-between px-4 py-2 border-b border-white/[0.06]">
-          <span className="text-xs text-gray-500 font-mono">{label}</span>
+        <div className="flex items-center justify-between px-4 py-2 border-b border-[rgba(255,255,255,0.05)]">
+          <span className="text-xs text-[#8a8f98] font-mono">{label}</span>
           <CopyButton text={code} />
         </div>
       )}
       <pre className="p-4 overflow-x-auto">
-        <code className="text-[13px] text-gray-300 font-mono leading-6">{code}</code>
+        <code className="text-[13px] text-[#d0d6e0] font-mono leading-6">{code}</code>
       </pre>
     </div>
   );
@@ -36,19 +36,19 @@ function CodeBlock({ code, label }: { code: string; label?: string }) {
 
 function ToolRef({ name, description, params }: { name: string; description: string; params: { name: string; type: string; required?: boolean; description: string }[] }) {
   return (
-    <div className="border-b border-white/[0.06] pb-8 mb-8 last:border-0 last:pb-0 last:mb-0">
+    <div className="border-b border-[rgba(255,255,255,0.05)] pb-8 mb-8 last:border-0 last:pb-0 last:mb-0">
       <div className="flex items-center gap-3 mb-2">
-        <code className="text-[15px] font-mono font-semibold text-[#0A84FF]">{name}</code>
+        <code className="text-[15px] font-mono font-semibold text-[#5e6ad2]">{name}</code>
       </div>
-      <p className="text-[14px] text-gray-400 leading-relaxed mb-4">{description}</p>
+      <p className="text-[14px] text-[#8a8f98] leading-relaxed mb-4">{description}</p>
       {params.length > 0 && (
-        <div className="bg-[#0a0a0a] rounded-lg border border-white/[0.06] overflow-hidden">
+        <div className="bg-[#08090a] rounded-lg border border-[rgba(255,255,255,0.05)] overflow-hidden">
           <table className="w-full text-left">
             <thead>
-              <tr className="border-b border-white/[0.06]">
-                <th className="px-4 py-2.5 text-xs font-medium text-gray-500 uppercase tracking-wider">Parameter</th>
-                <th className="px-4 py-2.5 text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                <th className="px-4 py-2.5 text-xs font-medium text-gray-500 uppercase tracking-wider hidden md:table-cell">Description</th>
+              <tr className="border-b border-[rgba(255,255,255,0.05)]">
+                <th className="px-4 py-2.5 text-xs font-medium text-[#8a8f98] uppercase tracking-wider">Parameter</th>
+                <th className="px-4 py-2.5 text-xs font-medium text-[#8a8f98] uppercase tracking-wider">Type</th>
+                <th className="px-4 py-2.5 text-xs font-medium text-[#8a8f98] uppercase tracking-wider hidden md:table-cell">Description</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/[0.04]">
@@ -56,13 +56,13 @@ function ToolRef({ name, description, params }: { name: string; description: str
                 <tr key={p.name}>
                   <td className="px-4 py-2.5">
                     <code className="text-[13px] text-white font-mono">{p.name}</code>
-                    {p.required && <span className="text-[10px] text-[#FF453A] ml-1.5 font-medium">required</span>}
+                    {p.required && <span className="text-[10px] text-[#eb5757] ml-1.5 font-medium">required</span>}
                   </td>
                   <td className="px-4 py-2.5">
-                    <span className="text-[12px] text-gray-500 font-mono">{p.type}</span>
+                    <span className="text-[12px] text-[#8a8f98] font-mono">{p.type}</span>
                   </td>
                   <td className="px-4 py-2.5 hidden md:table-cell">
-                    <span className="text-[13px] text-gray-400">{p.description}</span>
+                    <span className="text-[13px] text-[#8a8f98]">{p.description}</span>
                   </td>
                 </tr>
               ))}
@@ -90,27 +90,27 @@ export default function MCPPage() {
           <h1 className="text-2xl font-bold text-white">Agent Store MCP Server</h1>
         </div>
       </div>
-      <p className="text-[15px] text-gray-400 mt-3 leading-relaxed max-w-2xl">
+      <p className="text-[15px] text-[#8a8f98] mt-3 leading-relaxed max-w-2xl">
         Connect any MCP-compatible AI system to the Agent Store. Search, discover, and route tasks to the best AI agent — programmatically.
       </p>
 
       {/* Server info */}
-      <div className="mt-8 bg-[#1c1c1e] rounded-xl border border-white/[0.06] overflow-hidden">
-        <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/[0.06]">
+      <div className="mt-8 bg-[#0f1011] rounded-xl border border-[rgba(255,255,255,0.05)] overflow-hidden">
+        <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-[rgba(255,255,255,0.05)]">
           <div className="px-5 py-4">
-            <p className="text-[11px] text-gray-500 uppercase tracking-wider font-medium">Server</p>
+            <p className="text-[11px] text-[#8a8f98] uppercase tracking-wider font-medium">Server</p>
             <p className="text-[14px] text-white font-mono mt-1">agent-store</p>
           </div>
           <div className="px-5 py-4">
-            <p className="text-[11px] text-gray-500 uppercase tracking-wider font-medium">Version</p>
+            <p className="text-[11px] text-[#8a8f98] uppercase tracking-wider font-medium">Version</p>
             <p className="text-[14px] text-white font-mono mt-1">1.0.0</p>
           </div>
           <div className="px-5 py-4">
-            <p className="text-[11px] text-gray-500 uppercase tracking-wider font-medium">Protocol</p>
+            <p className="text-[11px] text-[#8a8f98] uppercase tracking-wider font-medium">Protocol</p>
             <p className="text-[14px] text-white font-mono mt-1">2025-11-25</p>
           </div>
           <div className="px-5 py-4">
-            <p className="text-[11px] text-gray-500 uppercase tracking-wider font-medium">Transport</p>
+            <p className="text-[11px] text-[#8a8f98] uppercase tracking-wider font-medium">Transport</p>
             <p className="text-[14px] text-white font-mono mt-1">HTTP</p>
           </div>
         </div>
@@ -119,13 +119,13 @@ export default function MCPPage() {
       {/* Status */}
       <div className="mt-4 flex items-center gap-4">
         <div className="flex items-center gap-1.5">
-          <div className="w-2 h-2 rounded-full bg-[#30D158]" />
-          <span className="text-[13px] text-gray-400">Operational</span>
+          <div className="w-2 h-2 rounded-full bg-[#10b981]" />
+          <span className="text-[13px] text-[#8a8f98]">Operational</span>
         </div>
-        <a href="/.well-known/mcp.json" target="_blank" className="text-[13px] text-[#0A84FF] hover:underline font-mono">
+        <a href="/.well-known/mcp.json" target="_blank" className="text-[13px] text-[#5e6ad2] hover:underline font-mono">
           /.well-known/mcp.json
         </a>
-        <a href="/api/mcp" target="_blank" className="text-[13px] text-[#0A84FF] hover:underline font-mono">
+        <a href="/api/mcp" target="_blank" className="text-[13px] text-[#5e6ad2] hover:underline font-mono">
           /api/mcp
         </a>
       </div>
@@ -133,7 +133,7 @@ export default function MCPPage() {
       {/* Quick setup */}
       <section className="mt-12">
         <h2 className="text-lg font-bold text-white mb-1">Quick Setup</h2>
-        <p className="text-[14px] text-gray-500 mb-5">Add the Agent Store as an MCP server in your client config.</p>
+        <p className="text-[14px] text-[#8a8f98] mb-5">Add the Agent Store as an MCP server in your client config.</p>
 
         <div className="flex gap-1 mb-3">
           {(["claude-desktop", "claude-code", "custom"] as const).map((tab) => (
@@ -142,8 +142,8 @@ export default function MCPPage() {
               onClick={() => setConfigTab(tab)}
               className={`px-3 py-1.5 rounded-lg text-[13px] font-medium transition-colors ${
                 configTab === tab
-                  ? "bg-white/10 text-white"
-                  : "text-gray-500 hover:text-gray-300"
+                  ? "bg-[rgba(255,255,255,0.08)] text-white"
+                  : "text-[#8a8f98] hover:text-[#d0d6e0]"
               }`}
             >
               {tab === "claude-desktop" ? "Claude Desktop" : tab === "claude-code" ? "Claude Code" : "Custom Client"}
@@ -163,7 +163,7 @@ export default function MCPPage() {
   }
 }`}
             />
-            <p className="text-[12px] text-gray-500 mt-2">Restart Claude Desktop after saving. The 4 agent discovery tools will appear automatically.</p>
+            <p className="text-[12px] text-[#8a8f98] mt-2">Restart Claude Desktop after saving. The 4 agent discovery tools will appear automatically.</p>
           </div>
         )}
 
@@ -179,7 +179,7 @@ export default function MCPPage() {
   }
 }`}
             />
-            <p className="text-[12px] text-gray-500 mt-2">Claude Code will pick this up on the next session. Use the tools like any other MCP tool.</p>
+            <p className="text-[12px] text-[#8a8f98] mt-2">Claude Code will pick this up on the next session. Use the tools like any other MCP tool.</p>
           </div>
         )}
 
@@ -203,7 +203,7 @@ Content-Type: application/json
   }
 }`}
             />
-            <p className="text-[12px] text-gray-500 mt-2">Standard MCP JSON-RPC over HTTP. No auth required for read operations.</p>
+            <p className="text-[12px] text-[#8a8f98] mt-2">Standard MCP JSON-RPC over HTTP. No auth required for read operations.</p>
           </div>
         )}
       </section>
@@ -211,35 +211,35 @@ Content-Type: application/json
       {/* Capabilities */}
       <section className="mt-12">
         <h2 className="text-lg font-bold text-white mb-1">Capabilities</h2>
-        <p className="text-[14px] text-gray-500 mb-5">What this server exposes to connected clients.</p>
+        <p className="text-[14px] text-[#8a8f98] mb-5">What this server exposes to connected clients.</p>
         <div className="grid grid-cols-2 gap-3">
-          <div className="bg-[#1c1c1e] rounded-xl border border-white/[0.06] px-5 py-4">
+          <div className="bg-[#0f1011] rounded-xl border border-[rgba(255,255,255,0.05)] px-5 py-4">
             <div className="flex items-center gap-2 mb-2">
-              <CheckCircle2 className="w-4 h-4 text-[#30D158]" />
+              <CheckCircle2 className="w-4 h-4 text-[#10b981]" />
               <span className="text-[14px] font-medium text-white">Tools</span>
             </div>
-            <p className="text-[13px] text-gray-500">4 tools for searching, filtering, and discovering agents by task</p>
+            <p className="text-[13px] text-[#8a8f98]">4 tools for searching, filtering, and discovering agents by task</p>
           </div>
-          <div className="bg-[#1c1c1e] rounded-xl border border-white/[0.06] px-5 py-4">
+          <div className="bg-[#0f1011] rounded-xl border border-[rgba(255,255,255,0.05)] px-5 py-4">
             <div className="flex items-center gap-2 mb-2">
-              <CheckCircle2 className="w-4 h-4 text-[#30D158]" />
+              <CheckCircle2 className="w-4 h-4 text-[#10b981]" />
               <span className="text-[14px] font-medium text-white">Resources</span>
             </div>
-            <p className="text-[13px] text-gray-500">Full catalog and category directory as readable resources</p>
+            <p className="text-[13px] text-[#8a8f98]">Full catalog and category directory as readable resources</p>
           </div>
-          <div className="bg-[#1c1c1e] rounded-xl border border-white/[0.06] px-5 py-4">
+          <div className="bg-[#0f1011] rounded-xl border border-[rgba(255,255,255,0.05)] px-5 py-4">
             <div className="flex items-center gap-2 mb-2">
-              <Circle className="w-4 h-4 text-gray-600" />
-              <span className="text-[14px] font-medium text-gray-500">Prompts</span>
+              <Circle className="w-4 h-4 text-[#62666d]" />
+              <span className="text-[14px] font-medium text-[#8a8f98]">Prompts</span>
             </div>
-            <p className="text-[13px] text-gray-600">Coming soon</p>
+            <p className="text-[13px] text-[#62666d]">Coming soon</p>
           </div>
-          <div className="bg-[#1c1c1e] rounded-xl border border-white/[0.06] px-5 py-4">
+          <div className="bg-[#0f1011] rounded-xl border border-[rgba(255,255,255,0.05)] px-5 py-4">
             <div className="flex items-center gap-2 mb-2">
-              <Circle className="w-4 h-4 text-gray-600" />
-              <span className="text-[14px] font-medium text-gray-500">Sampling</span>
+              <Circle className="w-4 h-4 text-[#62666d]" />
+              <span className="text-[14px] font-medium text-[#8a8f98]">Sampling</span>
             </div>
-            <p className="text-[13px] text-gray-600">Coming soon</p>
+            <p className="text-[13px] text-[#62666d]">Coming soon</p>
           </div>
         </div>
       </section>
@@ -247,7 +247,7 @@ Content-Type: application/json
       {/* Tools Reference */}
       <section className="mt-12">
         <h2 className="text-lg font-bold text-white mb-1">Tools</h2>
-        <p className="text-[14px] text-gray-500 mb-6">Complete reference for all available tools.</p>
+        <p className="text-[14px] text-[#8a8f98] mb-6">Complete reference for all available tools.</p>
 
         <ToolRef
           name="find_agent_for_task"
@@ -290,22 +290,22 @@ Content-Type: application/json
       {/* Resources */}
       <section className="mt-12">
         <h2 className="text-lg font-bold text-white mb-1">Resources</h2>
-        <p className="text-[14px] text-gray-500 mb-5">Readable resources exposed by this server.</p>
+        <p className="text-[14px] text-[#8a8f98] mb-5">Readable resources exposed by this server.</p>
 
-        <div className="bg-[#0a0a0a] rounded-lg border border-white/[0.06] divide-y divide-white/[0.04]">
+        <div className="bg-[#08090a] rounded-lg border border-[rgba(255,255,255,0.05)] divide-y divide-white/[0.04]">
           <div className="px-5 py-4 flex items-start justify-between">
             <div>
-              <code className="text-[13px] text-[#0A84FF] font-mono">agentstore://catalog</code>
-              <p className="text-[13px] text-gray-500 mt-1">Complete catalog of all approved agents with full metadata</p>
+              <code className="text-[13px] text-[#5e6ad2] font-mono">agentstore://catalog</code>
+              <p className="text-[13px] text-[#8a8f98] mt-1">Complete catalog of all approved agents with full metadata</p>
             </div>
-            <span className="text-[11px] text-gray-600 font-mono bg-white/5 px-2 py-0.5 rounded">application/json</span>
+            <span className="text-[11px] text-[#62666d] font-mono bg-white/5 px-2 py-0.5 rounded">application/json</span>
           </div>
           <div className="px-5 py-4 flex items-start justify-between">
             <div>
-              <code className="text-[13px] text-[#0A84FF] font-mono">agentstore://categories</code>
-              <p className="text-[13px] text-gray-500 mt-1">All categories with descriptions and agent counts</p>
+              <code className="text-[13px] text-[#5e6ad2] font-mono">agentstore://categories</code>
+              <p className="text-[13px] text-[#8a8f98] mt-1">All categories with descriptions and agent counts</p>
             </div>
-            <span className="text-[11px] text-gray-600 font-mono bg-white/5 px-2 py-0.5 rounded">application/json</span>
+            <span className="text-[11px] text-[#62666d] font-mono bg-white/5 px-2 py-0.5 rounded">application/json</span>
           </div>
         </div>
       </section>
@@ -313,7 +313,7 @@ Content-Type: application/json
       {/* Example */}
       <section className="mt-12">
         <h2 className="text-lg font-bold text-white mb-1">Example: Find an agent for a task</h2>
-        <p className="text-[14px] text-gray-500 mb-5">A user asks Claude: &ldquo;Find me an AI that can help with legal contract review.&rdquo; Claude calls the Agent Store:</p>
+        <p className="text-[14px] text-[#8a8f98] mb-5">A user asks Claude: &ldquo;Find me an AI that can help with legal contract review.&rdquo; Claude calls the Agent Store:</p>
 
         <CodeBlock
           label="Request"
@@ -362,15 +362,15 @@ Content-Type: application/json
           />
         </div>
 
-        <p className="text-[12px] text-gray-500 mt-3">Claude reads the response and recommends Harvey to the user, with pricing, rating, and a direct link.</p>
+        <p className="text-[12px] text-[#8a8f98] mt-3">Claude reads the response and recommends Harvey to the user, with pricing, rating, and a direct link.</p>
       </section>
 
       {/* REST API note */}
       <section className="mt-12">
         <h2 className="text-lg font-bold text-white mb-1">REST API</h2>
-        <p className="text-[14px] text-gray-500 mb-5">Prefer REST over JSON-RPC? The same data is available via standard HTTP endpoints.</p>
+        <p className="text-[14px] text-[#8a8f98] mb-5">Prefer REST over JSON-RPC? The same data is available via standard HTTP endpoints.</p>
 
-        <div className="bg-[#0a0a0a] rounded-lg border border-white/[0.06] divide-y divide-white/[0.04]">
+        <div className="bg-[#08090a] rounded-lg border border-[rgba(255,255,255,0.05)] divide-y divide-white/[0.04]">
           {[
             { method: "GET", path: "/api/agents", description: "Search & list agents" },
             { method: "GET", path: "/api/agents/:slug", description: "Get agent by slug" },
@@ -382,26 +382,26 @@ Content-Type: application/json
               target="_blank"
               className="flex items-center gap-4 px-5 py-3.5 hover:bg-white/[0.02] transition-colors"
             >
-              <span className="text-[11px] font-mono font-bold text-[#30D158] bg-[#30D158]/10 px-2 py-0.5 rounded">
+              <span className="text-[11px] font-mono font-bold text-[#10b981] bg-[#10b981]/10 px-2 py-0.5 rounded">
                 {endpoint.method}
               </span>
               <code className="text-[13px] text-white font-mono">{endpoint.path}</code>
-              <span className="text-[13px] text-gray-500 ml-auto hidden md:block">{endpoint.description}</span>
+              <span className="text-[13px] text-[#8a8f98] ml-auto hidden md:block">{endpoint.description}</span>
             </a>
           ))}
         </div>
       </section>
 
       {/* CTA */}
-      <section className="mt-14 mb-8 border-t border-white/[0.06] pt-10">
+      <section className="mt-14 mb-8 border-t border-[rgba(255,255,255,0.05)] pt-10">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div>
             <h3 className="text-[15px] font-semibold text-white">List your agent on the store</h3>
-            <p className="text-[13px] text-gray-500 mt-1">Every listed agent is automatically discoverable via MCP by every connected AI system.</p>
+            <p className="text-[13px] text-[#8a8f98] mt-1">Every listed agent is automatically discoverable via MCP by every connected AI system.</p>
           </div>
           <Link
             href="/submit"
-            className="bg-white text-black font-semibold px-6 py-2.5 rounded-lg text-[13px] hover:bg-gray-200 transition-colors flex-shrink-0"
+            className="bg-[#5e6ad2] text-white font-semibold px-6 py-2.5 rounded-lg text-[13px] hover:bg-[#6d78d5] transition-colors flex-shrink-0"
           >
             Submit Agent
           </Link>

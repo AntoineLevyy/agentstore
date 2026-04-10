@@ -1,24 +1,53 @@
 @import "tailwindcss";
 
 :root {
-  --background: #000000;
-  --foreground: #f5f5f7;
-  --card: #1c1c1e;
-  --card-hover: #2c2c2e;
-  --border: rgba(255, 255, 255, 0.08);
-  --muted: #8e8e93;
-  --accent: #0A84FF;
+  /* Brand */
+  --color-brand: #5e6ad2;
+  --color-brand-hover: #6d78d5;
+  --color-brand-muted: rgba(94, 106, 210, 0.15);
+
+  /* Backgrounds */
+  --color-bg-base: #08090a;
+  --color-bg-elevated: #0f1011;
+  --color-bg-surface: #101112;
+  --color-bg-overlay: #121314;
+  --color-bg-subtle: rgba(255, 255, 255, 0.02);
+  --color-bg-hover: rgba(255, 255, 255, 0.03);
+  --color-bg-active: rgba(255, 255, 255, 0.05);
+
+  /* Text */
+  --color-text-primary: #f7f8f8;
+  --color-text-secondary: #d0d6e0;
+  --color-text-tertiary: #8a8f98;
+  --color-text-muted: #62666d;
+
+  /* Borders */
+  --color-border-subtle: rgba(255, 255, 255, 0.05);
+  --color-border-default: rgba(255, 255, 255, 0.08);
+  --color-border-emphasis: rgba(255, 255, 255, 0.1);
+
+  /* Radius */
+  --radius-sm: 4px;
+  --radius-md: 5px;
+  --radius-default: 6px;
+  --radius-lg: 8px;
+  --radius-full: 9999px;
+
+  /* Motion */
+  --ease-default: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --duration-fast: 0.1s;
+  --duration-default: 0.16s;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: var(--color-bg-base);
+  --color-foreground: var(--color-text-primary);
   --font-sans: var(--font-inter);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
+  background: var(--color-bg-base);
+  color: var(--color-text-tertiary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -28,8 +57,18 @@ body {
 }
 
 select {
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%238e8e93' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%238a8f98' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
   background-position: right 0.75rem center;
   background-repeat: no-repeat;
   background-size: 1.25em 1.25em;
+}
+
+@keyframes marquee-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes marquee-right {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
 }

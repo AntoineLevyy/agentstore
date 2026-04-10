@@ -9,9 +9,9 @@ function RatingBar({ stars, count, total }: { stars: number; count: number; tota
   const pct = total > 0 ? (count / total) * 100 : 0;
   return (
     <div className="flex items-center gap-2">
-      <span className="text-xs text-gray-500 w-3 text-right">{stars}</span>
+      <span className="text-xs text-[#8a8f98] w-3 text-right">{stars}</span>
       <div className="flex-1 h-1.5 bg-white/5 rounded-full overflow-hidden">
-        <div className="h-full bg-[#FF9F0A] rounded-full" style={{ width: `${pct}%` }} />
+        <div className="h-full bg-[#fb923c] rounded-full" style={{ width: `${pct}%` }} />
       </div>
     </div>
   );
@@ -44,16 +44,16 @@ export default async function AgentPage({ params }: { params: Promise<{ slug: st
   return (
     <div className="max-w-[1200px] mx-auto px-5 py-8">
       {/* Breadcrumb */}
-      <div className="flex items-center gap-2 text-sm text-gray-500 mb-6">
-        <Link href="/" className="hover:text-gray-300">Home</Link>
+      <div className="flex items-center gap-2 text-sm text-[#8a8f98] mb-6">
+        <Link href="/" className="hover:text-[#d0d6e0]">Home</Link>
         <ChevronRight className="w-3 h-3" />
         {category && (
           <>
-            <Link href={`/category/${category.slug}`} className="hover:text-gray-300">{category.name}</Link>
+            <Link href={`/category/${category.slug}`} className="hover:text-[#d0d6e0]">{category.name}</Link>
             <ChevronRight className="w-3 h-3" />
           </>
         )}
-        <span className="text-gray-300">{agent.name}</span>
+        <span className="text-[#d0d6e0]">{agent.name}</span>
       </div>
 
       {/* Hero */}
@@ -61,22 +61,22 @@ export default async function AgentPage({ params }: { params: Promise<{ slug: st
         <AgentIcon name={agent.name} websiteUrl={agent.website_url} size="xl" />
         <div className="flex-1">
           <h1 className="text-3xl font-bold text-white">{agent.name}</h1>
-          <p className="text-lg text-gray-400 mt-1">{agent.tagline}</p>
+          <p className="text-lg text-[#8a8f98] mt-1">{agent.tagline}</p>
           {agent.creator_name && (
-            <p className="text-sm text-[#0A84FF] mt-1">{agent.creator_name}</p>
+            <p className="text-sm text-[#5e6ad2] mt-1">{agent.creator_name}</p>
           )}
           <div className="flex items-center gap-4 mt-4">
             <a
               href={agent.website_url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-[#0A84FF] text-white font-semibold px-8 py-3 rounded-full hover:bg-[#409CFF] transition-colors text-sm"
+              className="inline-flex items-center gap-2 bg-[#5e6ad2] text-white font-semibold px-8 py-3 rounded-full hover:bg-[#6d78d5] transition-colors text-sm"
             >
               {agent.pricing_type === "free" ? "Get" : priceLabel()}
               <ExternalLink className="w-4 h-4" />
             </a>
             {category && (
-              <Link href={`/category/${category.slug}`} className="text-sm text-gray-500 hover:text-gray-300">
+              <Link href={`/category/${category.slug}`} className="text-sm text-[#8a8f98] hover:text-[#d0d6e0]">
                 {category.icon} {category.name}
               </Link>
             )}
@@ -88,14 +88,14 @@ export default async function AgentPage({ params }: { params: Promise<{ slug: st
       {agent.whats_new && (
         <section className="mb-8 pb-8 border-b border-white/5">
           <h2 className="text-lg font-bold text-white mb-2">What&apos;s New</h2>
-          <p className="text-[15px] text-gray-400">{agent.whats_new}</p>
+          <p className="text-[15px] text-[#8a8f98]">{agent.whats_new}</p>
         </section>
       )}
 
       {/* Description */}
       <section className="mb-8 pb-8 border-b border-white/5">
         <h2 className="text-lg font-bold text-white mb-2">Description</h2>
-        <p className="text-[15px] text-gray-400 leading-relaxed">{agent.description}</p>
+        <p className="text-[15px] text-[#8a8f98] leading-relaxed">{agent.description}</p>
       </section>
 
       {/* Capabilities & Tools */}
@@ -105,7 +105,7 @@ export default async function AgentPage({ params }: { params: Promise<{ slug: st
             <h2 className="text-lg font-bold text-white mb-3">Capabilities</h2>
             <div className="flex flex-wrap gap-2">
               {agent.capabilities.map((cap) => (
-                <span key={cap} className="px-3 py-1.5 bg-white/8 rounded-full text-sm text-gray-300 font-medium">
+                <span key={cap} className="px-3 py-1.5 bg-white/8 rounded-full text-sm text-[#d0d6e0] font-medium">
                   {cap}
                 </span>
               ))}
@@ -115,7 +115,7 @@ export default async function AgentPage({ params }: { params: Promise<{ slug: st
             <h2 className="text-lg font-bold text-white mb-3">Tools</h2>
             <div className="flex flex-wrap gap-2">
               {agent.tools.map((tool) => (
-                <span key={tool} className="px-3 py-1.5 bg-[#0A84FF]/15 rounded-full text-sm text-[#0A84FF] font-medium">
+                <span key={tool} className="px-3 py-1.5 bg-[#5e6ad2]/15 rounded-full text-sm text-[#5e6ad2] font-medium">
                   {tool}
                 </span>
               ))}
@@ -128,7 +128,7 @@ export default async function AgentPage({ params }: { params: Promise<{ slug: st
       {agent.special_data && (
         <section className="mb-8 pb-8 border-b border-white/5">
           <h2 className="text-lg font-bold text-white mb-2">Special Data & Knowledge</h2>
-          <p className="text-[15px] text-gray-400">{agent.special_data}</p>
+          <p className="text-[15px] text-[#8a8f98]">{agent.special_data}</p>
         </section>
       )}
 
@@ -143,11 +143,11 @@ export default async function AgentPage({ params }: { params: Promise<{ slug: st
                 {[1, 2, 3, 4, 5].map((s) => (
                   <Star
                     key={s}
-                    className={`w-4 h-4 ${s <= Math.round(agent.rating_avg) ? "fill-[#FF9F0A] text-[#FF9F0A]" : "fill-gray-700 text-gray-700"}`}
+                    className={`w-4 h-4 ${s <= Math.round(agent.rating_avg) ? "fill-[#fb923c] text-[#fb923c]" : "fill-[#62666d] text-[#62666d]"}`}
                   />
                 ))}
               </div>
-              <p className="text-xs text-gray-500 mt-1">{agent.rating_count.toLocaleString()} Ratings</p>
+              <p className="text-xs text-[#8a8f98] mt-1">{agent.rating_count.toLocaleString()} Ratings</p>
             </div>
             <div className="flex-1 space-y-1.5">
               {[5, 4, 3, 2, 1].map((s, i) => (
@@ -156,15 +156,15 @@ export default async function AgentPage({ params }: { params: Promise<{ slug: st
             </div>
           </div>
         ) : (
-          <div className="bg-[#1c1c1e] rounded-2xl p-8 text-center">
+          <div className="bg-[#0f1011] rounded-2xl p-8 text-center">
             <div className="flex items-center justify-center gap-0.5 mb-3">
               {[1, 2, 3, 4, 5].map((s) => (
-                <Star key={s} className="w-5 h-5 fill-gray-700 text-gray-700" />
+                <Star key={s} className="w-5 h-5 fill-[#62666d] text-[#62666d]" />
               ))}
             </div>
-            <p className="text-gray-400 text-[15px]">No reviews yet</p>
-            <p className="text-gray-500 text-sm mt-1">Be the first to review {agent.name}</p>
-            <button className="mt-4 bg-[#0A84FF] text-white font-semibold px-6 py-2.5 rounded-full text-sm hover:bg-[#409CFF] transition-colors">
+            <p className="text-[#8a8f98] text-[15px]">No reviews yet</p>
+            <p className="text-[#8a8f98] text-sm mt-1">Be the first to review {agent.name}</p>
+            <button className="mt-4 bg-[#5e6ad2] text-white font-semibold px-6 py-2.5 rounded-full text-sm hover:bg-[#6d78d5] transition-colors">
               Write a Review
             </button>
           </div>
@@ -176,20 +176,20 @@ export default async function AgentPage({ params }: { params: Promise<{ slug: st
         <h2 className="text-lg font-bold text-white mb-4">Information</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div>
-            <p className="text-xs text-gray-500 font-medium">Category</p>
-            <p className="text-sm text-gray-300 mt-0.5">{category?.name}</p>
+            <p className="text-xs text-[#8a8f98] font-medium">Category</p>
+            <p className="text-sm text-[#d0d6e0] mt-0.5">{category?.name}</p>
           </div>
           <div>
-            <p className="text-xs text-gray-500 font-medium">Pricing</p>
-            <p className="text-sm text-gray-300 mt-0.5">{priceLabel()}</p>
+            <p className="text-xs text-[#8a8f98] font-medium">Pricing</p>
+            <p className="text-sm text-[#d0d6e0] mt-0.5">{priceLabel()}</p>
           </div>
           <div>
-            <p className="text-xs text-gray-500 font-medium">Creator</p>
-            <p className="text-sm text-gray-300 mt-0.5">{agent.creator_name || "Independent"}</p>
+            <p className="text-xs text-[#8a8f98] font-medium">Creator</p>
+            <p className="text-sm text-[#d0d6e0] mt-0.5">{agent.creator_name || "Independent"}</p>
           </div>
           <div>
-            <p className="text-xs text-gray-500 font-medium">Website</p>
-            <a href={agent.website_url} target="_blank" rel="noopener noreferrer" className="text-sm text-[#0A84FF] mt-0.5 flex items-center gap-1 hover:underline">
+            <p className="text-xs text-[#8a8f98] font-medium">Website</p>
+            <a href={agent.website_url} target="_blank" rel="noopener noreferrer" className="text-sm text-[#5e6ad2] mt-0.5 flex items-center gap-1 hover:underline">
               <Globe className="w-3 h-3" /> Visit
             </a>
           </div>
@@ -204,56 +204,56 @@ export default async function AgentPage({ params }: { params: Promise<{ slug: st
             href={agent.website_url}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-3 bg-[#1c1c1e] rounded-xl p-4 border border-white/[0.06] hover:border-[#0A84FF]/30 transition-colors group"
+            className="flex items-center gap-3 bg-[#0f1011] rounded-xl p-4 border border-[rgba(255,255,255,0.05)] hover:border-[#5e6ad2]/30 transition-colors group"
           >
-            <div className="w-9 h-9 rounded-lg bg-[#0A84FF]/10 flex items-center justify-center flex-shrink-0">
-              <Globe className="w-4 h-4 text-[#0A84FF]" />
+            <div className="w-9 h-9 rounded-lg bg-[#5e6ad2]/10 flex items-center justify-center flex-shrink-0">
+              <Globe className="w-4 h-4 text-[#5e6ad2]" />
             </div>
             <div className="min-w-0">
-              <p className="text-sm font-medium text-white group-hover:text-[#0A84FF] transition-colors">Official Website</p>
-              <p className="text-[12px] text-gray-500 truncate">{agent.website_url}</p>
+              <p className="text-sm font-medium text-white group-hover:text-[#5e6ad2] transition-colors">Official Website</p>
+              <p className="text-[12px] text-[#8a8f98] truncate">{agent.website_url}</p>
             </div>
           </a>
           <a
             href={`${agent.website_url}${agent.website_url.endsWith("/") ? "" : "/"}docs`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-3 bg-[#1c1c1e] rounded-xl p-4 border border-white/[0.06] hover:border-[#0A84FF]/30 transition-colors group"
+            className="flex items-center gap-3 bg-[#0f1011] rounded-xl p-4 border border-[rgba(255,255,255,0.05)] hover:border-[#5e6ad2]/30 transition-colors group"
           >
-            <div className="w-9 h-9 rounded-lg bg-purple-500/10 flex items-center justify-center flex-shrink-0">
-              <BookOpen className="w-4 h-4 text-purple-400" />
+            <div className="w-9 h-9 rounded-lg bg-[#8b5cf6]/10 flex items-center justify-center flex-shrink-0">
+              <BookOpen className="w-4 h-4 text-[#8b5cf6]" />
             </div>
             <div className="min-w-0">
-              <p className="text-sm font-medium text-white group-hover:text-purple-400 transition-colors">Documentation</p>
-              <p className="text-[12px] text-gray-500">Guides, API docs, and getting started</p>
+              <p className="text-sm font-medium text-white group-hover:text-[#8b5cf6] transition-colors">Documentation</p>
+              <p className="text-[12px] text-[#8a8f98]">Guides, API docs, and getting started</p>
             </div>
           </a>
           <a
             href={`https://www.google.com/search?q=${encodeURIComponent(agent.name + " tutorial getting started")}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-3 bg-[#1c1c1e] rounded-xl p-4 border border-white/[0.06] hover:border-[#0A84FF]/30 transition-colors group"
+            className="flex items-center gap-3 bg-[#0f1011] rounded-xl p-4 border border-[rgba(255,255,255,0.05)] hover:border-[#5e6ad2]/30 transition-colors group"
           >
-            <div className="w-9 h-9 rounded-lg bg-green-500/10 flex items-center justify-center flex-shrink-0">
-              <FileText className="w-4 h-4 text-green-400" />
+            <div className="w-9 h-9 rounded-lg bg-[#10b981]/10 flex items-center justify-center flex-shrink-0">
+              <FileText className="w-4 h-4 text-[#10b981]" />
             </div>
             <div className="min-w-0">
-              <p className="text-sm font-medium text-white group-hover:text-green-400 transition-colors">Tutorials & Guides</p>
-              <p className="text-[12px] text-gray-500">Community tutorials and walkthroughs</p>
+              <p className="text-sm font-medium text-white group-hover:text-[#10b981] transition-colors">Tutorials & Guides</p>
+              <p className="text-[12px] text-[#8a8f98]">Community tutorials and walkthroughs</p>
             </div>
           </a>
           <a
             href={`https://www.youtube.com/results?search_query=${encodeURIComponent(agent.name + " tutorial review")}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center gap-3 bg-[#1c1c1e] rounded-xl p-4 border border-white/[0.06] hover:border-[#0A84FF]/30 transition-colors group"
+            className="flex items-center gap-3 bg-[#0f1011] rounded-xl p-4 border border-[rgba(255,255,255,0.05)] hover:border-[#5e6ad2]/30 transition-colors group"
           >
-            <div className="w-9 h-9 rounded-lg bg-red-500/10 flex items-center justify-center flex-shrink-0">
-              <Video className="w-4 h-4 text-red-400" />
+            <div className="w-9 h-9 rounded-lg bg-[#eb5757]/10 flex items-center justify-center flex-shrink-0">
+              <Video className="w-4 h-4 text-[#eb5757]" />
             </div>
             <div className="min-w-0">
-              <p className="text-sm font-medium text-white group-hover:text-red-400 transition-colors">Video Reviews</p>
-              <p className="text-[12px] text-gray-500">YouTube tutorials and reviews</p>
+              <p className="text-sm font-medium text-white group-hover:text-[#eb5757] transition-colors">Video Reviews</p>
+              <p className="text-[12px] text-[#8a8f98]">YouTube tutorials and reviews</p>
             </div>
           </a>
         </div>
@@ -263,7 +263,7 @@ export default async function AgentPage({ params }: { params: Promise<{ slug: st
       {relatedAgents.length > 0 && (
         <section className="mb-10">
           <h2 className="text-lg font-bold text-white mb-4">You Might Also Like</h2>
-          <div className="bg-[#1c1c1e] rounded-[20px] divide-y divide-white/5">
+          <div className="bg-[#0f1011] rounded-[20px] divide-y divide-white/5">
             {relatedAgents.map((a) => (
               <div key={a.id} className="px-5 py-4">
                 <AgentCard agent={a} />
