@@ -77,7 +77,7 @@ export default async function AgentPage({ params }: { params: Promise<{ slug: st
             </a>
             {category && (
               <Link href={`/category/${category.slug}`} className="text-sm text-[#8a8f98] hover:text-[#d0d6e0]">
-                {category.icon} {category.name}
+                {category.name}
               </Link>
             )}
           </div>

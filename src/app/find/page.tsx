@@ -75,7 +75,7 @@ function ResultCard({ agent, score }: { agent: Agent; score: number }) {
               <h3 className="font-semibold text-white text-[15px] truncate">{agent.name}</h3>
               {category && (
                 <span className="text-[11px] text-[#8a8f98] bg-white/5 px-2 py-0.5 rounded-full flex-shrink-0">
-                  {category.icon} {category.name}
+                  {category.name}
                 </span>
               )}
             </div>

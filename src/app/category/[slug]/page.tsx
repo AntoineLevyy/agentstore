@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getCategory, getAgentsByCategory, categories } from "@/lib/data";
 import { AgentCard } from "@/components/AgentCard";
 import { ChevronRight } from "lucide-react";
+import { CategoryIcon } from "@/components/CategoryIcon";
 
 export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
@@ -24,7 +25,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
 
       {/* Header */}
       <div className="flex items-center gap-4 mb-8">
-        <span className="text-4xl">{category.icon}</span>
+        <CategoryIcon slug={category.slug} size="lg" />
         <div>
           <h1 className="text-3xl font-bold text-white">{category.name}</h1>
           <p className="text-[#8a8f98] mt-1">{category.description}</p>
@@ -62,7 +63,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
                 href={`/category/${cat.slug}`}
                 className="bg-[#0f1011] rounded-2xl p-4 hover:bg-[#101112] transition-colors"
               >
-                <span className="text-2xl">{cat.icon}</span>
+                <CategoryIcon slug={cat.slug} />
                 <p className="font-semibold text-sm text-white mt-2">{cat.name}</p>
               </Link>
             ))}

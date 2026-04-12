@@ -1,5 +1,5 @@
 export type PricingType = "free" | "freemium" | "paid" | "contact";
-export type PricingPeriod = "one_time" | "monthly" | "yearly" | "per_use";
+export type PricingPeriod = "one_time" | "monthly" | "yearly" | "per_use" | "weekly";
 export type AgentStatus = "draft" | "pending_review" | "approved" | "rejected" | "suspended";
 
 export interface Agent {

@@ -3,9 +3,10 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Search, SlidersHorizontal, Sparkles } from "lucide-react";
-import { agents, categories, getCategoryById } from "@/lib/data";
+import { agents, categories, b2bCategories, b2cCategories, getCategoryById } from "@/lib/data";
 import { Agent } from "@/lib/types";
 import { AgentCard, AgentCardGrid } from "@/components/AgentCard";
+import { CategoryIcon } from "@/components/CategoryIcon";
 import { AgentIcon } from "@/components/AgentIcon";
 
 interface Filters {
@@ -62,7 +63,7 @@ function ResultCard({ agent, score }: { agent: Agent; score: number }) {
               <h3 className="font-semibold text-white text-[15px] truncate">{agent.name}</h3>
               {category && (
                 <span className="text-[11px] text-[#8a8f98] bg-white/5 px-2 py-0.5 rounded-full flex-shrink-0">
-                  {category.icon} {category.name}
+                  {category.name}
                 </span>
               )}
             </div>
@@ -252,21 +253,48 @@ export default function DiscoverPage() {
         </div>
       )}
 
-      {/* Categories */}
+      {/* B2B Categories */}
       <section className="mb-10">
-        <h2 className="text-xl font-bold text-white mb-4">Categories</h2>
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-          {categories.map((cat) => {
+        <div className="flex items-center gap-3 mb-4">
+          <span className="text-[12px] font-[510] text-[#5e6ad2] bg-[rgba(94,106,210,0.12)] px-2.5 py-1 rounded-[4px]">For Work</span>
+          <h2 className="text-[16px] font-[590] text-[#d0d6e0]">Business & Professional</h2>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+          {b2bCategories.map((cat) => {
             const count = approvedAgents.filter((a) => a.category_id === cat.id).length;
             return (
               <Link
                 key={cat.id}
                 href={`/category/${cat.slug}`}
-                className="bg-[#0f1011] rounded-2xl p-4 hover:bg-[#101112] transition-colors"
+                className="bg-[#0f1011] rounded-[8px] p-4 border border-[rgba(255,255,255,0.05)] hover:border-[rgba(255,255,255,0.08)] hover:bg-[#101112] transition-all duration-[0.16s]"
               >
-                <span className="text-2xl">{cat.icon}</span>
-                <p className="font-semibold text-sm text-white mt-2">{cat.name}</p>
-                <p className="text-xs text-[#8a8f98] mt-0.5">{count} agent{count !== 1 ? "s" : ""}</p>
+                <CategoryIcon slug={cat.slug} />
+                <p className="font-[590] text-[13px] text-[#d0d6e0] mt-2 tracking-[-0.01em]">{cat.name}</p>
+                <p className="text-[11px] text-[#62666d] font-[510] mt-0.5">{count} agents</p>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* B2C Categories */}
+      <section className="mb-10">
+        <div className="flex items-center gap-3 mb-4">
+          <span className="text-[12px] font-[510] text-[#10b981] bg-[rgba(16,185,129,0.12)] px-2.5 py-1 rounded-[4px]">For Life</span>
+          <h2 className="text-[16px] font-[590] text-[#d0d6e0]">Personal & Everyday</h2>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+          {b2cCategories.map((cat) => {
+            const count = approvedAgents.filter((a) => a.category_id === cat.id).length;
+            return (
+              <Link
+                key={cat.id}
+                href={`/category/${cat.slug}`}
+                className="bg-[#0f1011] rounded-[8px] p-4 border border-[rgba(255,255,255,0.05)] hover:border-[rgba(255,255,255,0.08)] hover:bg-[#101112] transition-all duration-[0.16s]"
+              >
+                <CategoryIcon slug={cat.slug} />
+                <p className="font-[590] text-[13px] text-[#d0d6e0] mt-2 tracking-[-0.01em]">{cat.name}</p>
+                <p className="text-[11px] text-[#62666d] font-[510] mt-0.5">{count} agents</p>
               </Link>
             );
           })}

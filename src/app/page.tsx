@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { agents, categories } from "@/lib/data";
+import { agents, b2bCategories, b2cCategories } from "@/lib/data";
 import { AgentIcon } from "@/components/AgentIcon";
 import { ArrowRight, Search, Layers, Zap, Globe } from "lucide-react";
+import { CategoryIcon } from "@/components/CategoryIcon";
 
 
 export default function Home() {
@@ -10,7 +11,11 @@ export default function Home() {
   const marqueeAgents = approved.filter((a) => a.website_url).sort(() => 0.5 - Math.random()).slice(0, 40);
   const row1 = marqueeAgents.slice(0, 20);
   const row2 = marqueeAgents.slice(20, 40);
-  const categoryStats = categories.map((c) => ({
+  const b2bStats = b2bCategories.map((c) => ({
+    ...c,
+    count: approved.filter((a) => a.category_id === c.id).length,
+  }));
+  const b2cStats = b2cCategories.map((c) => ({
     ...c,
     count: approved.filter((a) => a.category_id === c.id).length,
   }));
@@ -32,13 +37,13 @@ export default function Home() {
           </div>
 
           <h1 className="text-[64px] md:text-[80px] font-[510] text-[#f7f8f8] leading-[1.0] tracking-[-1.6px]">
-            The right agent
+            Find the right agent
             <br />
             for every task.
           </h1>
 
           <p className="text-[15px] text-[#8a8f98] mt-8 max-w-md mx-auto leading-[24px] tracking-[-0.165px]">
-            500+ AI agents. {categories.length} categories.
+            500+ AI agents. 18 categories.
             <br className="hidden md:block" />
             Searchable by humans. Discoverable by machines.
           </p>
@@ -147,7 +152,7 @@ export default function Home() {
               </div>
               <p className="text-[12px] font-[510] text-[#62666d] uppercase tracking-wider">Catalog</p>
             </div>
-            <h3 className="text-[16px] font-[590] text-[#d0d6e0] leading-[24px]">{categories.length} categories. 500+ agents.</h3>
+            <h3 className="text-[16px] font-[590] text-[#d0d6e0] leading-[24px]">18 categories. 500+ agents.</h3>
             <p className="text-[13px] text-[#62666d] mt-2 leading-[19.5px]">
               Capabilities, tools, pricing, and what makes each one unique.
             </p>
@@ -246,24 +251,48 @@ export default function Home() {
       {/* ─── Divider ─────────────────────────────────────────── */}
       <div className="border-t border-[rgba(255,255,255,0.05)]" />
 
-      {/* ─── Category grid ───────────────────────────────────── */}
+      {/* ─── Category grids ──────────────────────────────────── */}
       <section className="max-w-[1200px] mx-auto px-5 py-24">
-        <div className="max-w-2xl mb-12">
-          <p className="text-[13px] font-[510] text-[#62666d] mb-4">Browse by Category</p>
-          <h2 className="text-[48px] font-[510] text-[#f7f8f8] leading-[48px] tracking-[-1.056px]">Every type of AI agent.</h2>
+        {/* B2B */}
+        <div className="mb-16">
+          <div className="flex items-center gap-3 mb-6">
+            <span className="text-[12px] font-[510] text-[#5e6ad2] bg-[rgba(94,106,210,0.12)] px-2.5 py-1 rounded-[4px]">For Work</span>
+            <h2 className="text-[20px] font-[590] text-[#d0d6e0] tracking-[-0.24px]">Business & Professional</h2>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+            {b2bStats.map((cat) => (
+              <Link
+                key={cat.id}
+                href={`/category/${cat.slug}`}
+                className="bg-[#0f1011] rounded-[8px] p-5 border border-[rgba(255,255,255,0.05)] hover:border-[rgba(255,255,255,0.08)] hover:bg-[#101112] transition-all duration-[0.16s]"
+              >
+                <CategoryIcon slug={cat.slug} size="lg" />
+                <p className="font-[590] text-[14px] text-[#d0d6e0] mt-3 tracking-[-0.01em]">{cat.name}</p>
+                <p className="text-[12px] text-[#62666d] font-[510] mt-0.5">{cat.count} agents</p>
+              </Link>
+            ))}
+          </div>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
-          {categoryStats.map((cat) => (
-            <Link
-              key={cat.id}
-              href={`/category/${cat.slug}`}
-              className="bg-[#0f1011] rounded-[8px] p-5 border border-[rgba(255,255,255,0.05)] hover:border-[rgba(255,255,255,0.08)] hover:bg-[#101112] transition-all duration-[0.16s]"
-            >
-              <span className="text-2xl">{cat.icon}</span>
-              <p className="font-[590] text-[14px] text-[#d0d6e0] mt-2.5 tracking-[-0.01em]">{cat.name}</p>
-              <p className="text-[12px] text-[#62666d] font-[510] mt-0.5">{cat.count} agents</p>
-            </Link>
-          ))}
+
+        {/* B2C */}
+        <div>
+          <div className="flex items-center gap-3 mb-6">
+            <span className="text-[12px] font-[510] text-[#10b981] bg-[rgba(16,185,129,0.12)] px-2.5 py-1 rounded-[4px]">For Life</span>
+            <h2 className="text-[20px] font-[590] text-[#d0d6e0] tracking-[-0.24px]">Personal & Everyday</h2>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+            {b2cStats.map((cat) => (
+              <Link
+                key={cat.id}
+                href={`/category/${cat.slug}`}
+                className="bg-[#0f1011] rounded-[8px] p-5 border border-[rgba(255,255,255,0.05)] hover:border-[rgba(255,255,255,0.08)] hover:bg-[#101112] transition-all duration-[0.16s]"
+              >
+                <CategoryIcon slug={cat.slug} size="lg" />
+                <p className="font-[590] text-[14px] text-[#d0d6e0] mt-3 tracking-[-0.01em]">{cat.name}</p>
+                <p className="text-[12px] text-[#62666d] font-[510] mt-0.5">{cat.count} agents</p>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
@@ -278,7 +307,7 @@ export default function Home() {
             Start discovering.
           </h2>
           <p className="text-[15px] text-[#8a8f98] mt-5 max-w-sm mx-auto leading-[24px] tracking-[-0.165px]">
-            500+ AI agents. {categories.length} categories. One search away.
+            500+ AI agents. 18 categories. One search away.
           </p>
           <Link
             href="/discover"
@@ -334,7 +363,7 @@ export default function Home() {
               />
               <p className="text-[12px] text-[#62666d] font-[510]">Agent Store</p>
             </div>
-            <p className="text-[11px] text-[#62666d]">500+ agents · {categories.length} categories · MCP 2025-11-25</p>
+            <p className="text-[11px] text-[#62666d]">500+ agents · 18 categories · MCP 2025-11-25</p>
           </div>
         </div>
       </footer>
