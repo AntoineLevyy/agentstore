@@ -1,9 +1,12 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getAgent, getCategoryById, getAgentsByCategory } from "@/lib/data";
+import { getCategoryById } from "@/lib/data";
+import { getAgentBySlug, getAgentsByCategory as getRelatedAgents, getReviewsForAgent } from "@/lib/db";
 import { Star, ExternalLink, Globe, ChevronRight, BookOpen, FileText, Video, MessageSquare } from "lucide-react";
 import { AgentCard } from "@/components/AgentCard";
 import { AgentIcon } from "@/components/AgentIcon";
+import { ReviewForm } from "@/components/ReviewForm";
+import { ReviewList } from "@/components/ReviewList";
 
 function RatingBar({ stars, count, total }: { stars: number; count: number; total: number }) {
   const pct = total > 0 ? (count / total) * 100 : 0;
@@ -17,13 +20,17 @@ function RatingBar({ stars, count, total }: { stars: number; count: number; tota
   );
 }
 
+export const revalidate = 60; // Revalidate every 60 seconds
+
 export default async function AgentPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const agent = getAgent(slug);
+  const agent = await getAgentBySlug(slug);
   if (!agent) notFound();
 
   const category = getCategoryById(agent.category_id);
-  const relatedAgents = getAgentsByCategory(agent.category_id).filter((a) => a.id !== agent.id).slice(0, 4);
+  const reviews = await getReviewsForAgent(slug);
+  const allRelated = await getRelatedAgents(agent.category_id);
+  const relatedAgents = allRelated.filter((a) => a.id !== agent.id).slice(0, 4);
 
   const priceLabel = () => {
     if (agent.pricing_type === "free") return "Free";
@@ -32,14 +39,6 @@ export default async function AgentPage({ params }: { params: Promise<{ slug: st
     return `$${agent.pricing_amount}${period}`;
   };
 
-  const totalReviews = agent.rating_count;
-  const ratingDist = [
-    Math.round(totalReviews * 0.6),
-    Math.round(totalReviews * 0.2),
-    Math.round(totalReviews * 0.1),
-    Math.round(totalReviews * 0.05),
-    Math.round(totalReviews * 0.05),
-  ];
 
   return (
     <div className="max-w-[1200px] mx-auto px-5 py-8">
@@ -135,40 +134,31 @@ export default async function AgentPage({ params }: { params: Promise<{ slug: st
       {/* Ratings & Reviews */}
       <section className="mb-8 pb-8 border-b border-white/5">
         <h2 className="text-lg font-bold text-white mb-4">Ratings & Reviews</h2>
-        {agent.rating_count > 0 ? (
-          <div className="flex items-start gap-8">
+        {reviews.length > 0 ? (
+          <div className="flex items-start gap-8 mb-8">
             <div className="text-center">
-              <p className="text-5xl font-bold text-white">{agent.rating_avg.toFixed(1)}</p>
+              <p className="text-5xl font-bold text-white">{Number(agent.rating_avg).toFixed(1)}</p>
               <div className="flex items-center justify-center gap-0.5 mt-1">
                 {[1, 2, 3, 4, 5].map((s) => (
                   <Star
                     key={s}
-                    className={`w-4 h-4 ${s <= Math.round(agent.rating_avg) ? "fill-[#fb923c] text-[#fb923c]" : "fill-[#62666d] text-[#62666d]"}`}
+                    className={`w-4 h-4 ${s <= Math.round(Number(agent.rating_avg)) ? "fill-[#fb923c] text-[#fb923c]" : "fill-[#62666d] text-[#62666d]"}`}
                   />
                 ))}
               </div>
-              <p className="text-xs text-[#8a8f98] mt-1">{agent.rating_count.toLocaleString()} Ratings</p>
+              <p className="text-xs text-[#8a8f98] mt-1">{reviews.length} {reviews.length === 1 ? "Review" : "Reviews"}</p>
             </div>
             <div className="flex-1 space-y-1.5">
-              {[5, 4, 3, 2, 1].map((s, i) => (
-                <RatingBar key={s} stars={s} count={ratingDist[i]} total={totalReviews} />
+              {[5, 4, 3, 2, 1].map((s) => (
+                <RatingBar key={s} stars={s} count={reviews.filter(r => r.rating === s).length} total={reviews.length} />
               ))}
             </div>
           </div>
         ) : (
-          <div className="bg-[#0f1011] rounded-2xl p-8 text-center">
-            <div className="flex items-center justify-center gap-0.5 mb-3">
-              {[1, 2, 3, 4, 5].map((s) => (
-                <Star key={s} className="w-5 h-5 fill-[#62666d] text-[#62666d]" />
-              ))}
-            </div>
-            <p className="text-[#8a8f98] text-[15px]">No reviews yet</p>
-            <p className="text-[#8a8f98] text-sm mt-1">Be the first to review {agent.name}</p>
-            <button className="mt-4 bg-[#5e6ad2] text-white font-semibold px-6 py-2.5 rounded-full text-sm hover:bg-[#6d78d5] transition-colors">
-              Write a Review
-            </button>
-          </div>
+          <p className="text-[#8a8f98] text-[15px] mb-6">No reviews yet. Be the first to review {agent.name}.</p>
         )}
+        <ReviewList reviews={reviews} />
+        <ReviewForm agentSlug={agent.slug} agentName={agent.name} />
       </section>
 
       {/* Information */}

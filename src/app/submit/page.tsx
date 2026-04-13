@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { categories } from "@/lib/data";
+import { submitAgent } from "@/lib/db";
 import { Check, ChevronLeft, ChevronRight, Upload, Plus, X } from "lucide-react";
 
 const steps = [
@@ -76,8 +77,36 @@ export default function SubmitPage() {
     }
   }
 
-  function handleSubmit() {
-    setSubmitted(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+
+  async function handleSubmit() {
+    setSubmitting(true);
+    setSubmitError("");
+    try {
+      const slug = form.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+      await submitAgent({
+        name: form.name,
+        slug,
+        tagline: form.tagline,
+        description: form.description,
+        category_id: form.category_id,
+        capabilities: form.capabilities.filter((c) => c.trim()),
+        tools: form.tools.filter((t) => t.trim()),
+        special_data: form.special_data,
+        website_url: form.website_url,
+        creator_name: form.creator_name,
+        pricing_type: form.pricing_type,
+        pricing_amount: form.pricing_amount ? parseFloat(form.pricing_amount) : null,
+        pricing_period: (form.pricing_type === "paid" || form.pricing_type === "freemium") ? form.pricing_period : null,
+      });
+      setSubmitted(true);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Submission failed. Please try again.";
+      setSubmitError(message);
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   if (submitted) {
@@ -448,12 +477,16 @@ export default function SubmitPage() {
             Next <ChevronRight className="w-4 h-4" />
           </button>
         ) : (
-          <button
-            onClick={handleSubmit}
-            className="flex items-center gap-1.5 bg-[#5e6ad2] text-white font-semibold px-8 py-3 rounded-full hover:bg-[#6d78d5] transition-colors text-sm"
-          >
-            <Check className="w-4 h-4" /> Submit Agent
-          </button>
+          <div className="flex flex-col items-end gap-2">
+            {submitError && <p className="text-[#eb5757] text-[12px]">{submitError}</p>}
+            <button
+              onClick={handleSubmit}
+              disabled={submitting}
+              className="flex items-center gap-1.5 bg-[#5e6ad2] text-white font-semibold px-8 py-3 rounded-full hover:bg-[#6d78d5] transition-colors text-sm disabled:opacity-40"
+            >
+              <Check className="w-4 h-4" /> {submitting ? "Submitting..." : "Submit Agent"}
+            </button>
+          </div>
         )}
       </div>
     </div>
