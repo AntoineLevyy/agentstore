@@ -143,10 +143,11 @@ export async function submitReview(review: {
 
   if (reviews && reviews.length > 0) {
     const avg = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
-    await supabase
-      .from("agents")
-      .update({ rating_avg: Math.round(avg * 10) / 10, rating_count: reviews.length })
-      .eq("slug", review.agent_slug);
+    await supabase.rpc("update_agent_rating", {
+      agent_slug: review.agent_slug,
+      new_avg: Math.round(avg * 10) / 10,
+      new_count: reviews.length,
+    });
   }
 
   return data;
