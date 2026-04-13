@@ -84,7 +84,8 @@ export default function SubmitPage() {
     setSubmitting(true);
     setSubmitError("");
     try {
-      const slug = form.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+      const baseSlug = form.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+      const slug = `${baseSlug}-${Date.now().toString(36)}`;
       await submitAgent({
         name: form.name,
         slug,
@@ -102,7 +103,8 @@ export default function SubmitPage() {
       });
       setSubmitted(true);
     } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Submission failed. Please try again.";
+      console.error("Submit error:", err);
+      const message = err instanceof Error ? err.message : JSON.stringify(err);
       setSubmitError(message);
     } finally {
       setSubmitting(false);

@@ -1,10 +1,10 @@
-import { supabase } from "./supabase";
+import { getSupabase } from "./supabase";
 import { Agent } from "./types";
 
 // ─── Agents ─────────────────────────────────────────────
 
 export async function getAgentBySlug(slug: string): Promise<Agent | null> {
-  const { data } = await supabase
+  const { data } = await getSupabase()
     .from("agents")
     .select("*")
     .eq("slug", slug)
@@ -14,7 +14,7 @@ export async function getAgentBySlug(slug: string): Promise<Agent | null> {
 }
 
 export async function getAgentsByCategory(categoryId: string): Promise<Agent[]> {
-  const { data } = await supabase
+  const { data } = await getSupabase()
     .from("agents")
     .select("*")
     .eq("category_id", categoryId)
@@ -24,7 +24,7 @@ export async function getAgentsByCategory(categoryId: string): Promise<Agent[]> 
 }
 
 export async function getFeaturedAgents(): Promise<Agent[]> {
-  const { data } = await supabase
+  const { data } = await getSupabase()
     .from("agents")
     .select("*")
     .eq("status", "approved")
@@ -35,7 +35,7 @@ export async function getFeaturedAgents(): Promise<Agent[]> {
 }
 
 export async function searchAgents(query: string): Promise<Agent[]> {
-  const { data } = await supabase
+  const { data } = await getSupabase()
     .from("agents")
     .select("*")
     .eq("status", "approved")
@@ -46,7 +46,7 @@ export async function searchAgents(query: string): Promise<Agent[]> {
 }
 
 export async function getAllApprovedAgents(): Promise<Agent[]> {
-  const { data } = await supabase
+  const { data } = await getSupabase()
     .from("agents")
     .select("*")
     .eq("status", "approved")
@@ -55,7 +55,7 @@ export async function getAllApprovedAgents(): Promise<Agent[]> {
 }
 
 export async function getCategoryAgentCount(categoryId: string): Promise<number> {
-  const { count } = await supabase
+  const { count } = await getSupabase()
     .from("agents")
     .select("*", { count: "exact", head: true })
     .eq("category_id", categoryId)
@@ -80,7 +80,7 @@ export async function submitAgent(agent: {
   pricing_amount: number | null;
   pricing_period: string | null;
 }) {
-  const { data, error } = await supabase
+  const { error } = await getSupabase()
     .from("agents")
     .insert({
       ...agent,
@@ -91,12 +91,10 @@ export async function submitAgent(agent: {
       featured: false,
       rating_avg: 0,
       rating_count: 0,
-    })
-    .select()
-    .single();
+    });
 
   if (error) throw error;
-  return data;
+  return { success: true };
 }
 
 // ─── Reviews ────────────────────────────────────────────
@@ -112,7 +110,7 @@ export interface Review {
 }
 
 export async function getReviewsForAgent(agentSlug: string): Promise<Review[]> {
-  const { data } = await supabase
+  const { data } = await getSupabase()
     .from("reviews")
     .select("*")
     .eq("agent_slug", agentSlug)
@@ -127,7 +125,7 @@ export async function submitReview(review: {
   title: string;
   body: string;
 }) {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from("reviews")
     .insert(review)
     .select()
@@ -136,14 +134,14 @@ export async function submitReview(review: {
   if (error) throw error;
 
   // Update agent rating
-  const { data: reviews } = await supabase
+  const { data: reviews } = await getSupabase()
     .from("reviews")
     .select("rating")
     .eq("agent_slug", review.agent_slug);
 
   if (reviews && reviews.length > 0) {
     const avg = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
-    await supabase.rpc("update_agent_rating", {
+    await getSupabase().rpc("update_agent_rating", {
       agent_slug: review.agent_slug,
       new_avg: Math.round(avg * 10) / 10,
       new_count: reviews.length,
