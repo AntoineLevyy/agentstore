@@ -69,7 +69,7 @@ function ResultCard({ agent, score }: { agent: Agent; score: number }) {
     <Link href={`/agent/${agent.slug}`} className="block group">
       <div className="bg-[#0f1011] rounded-2xl p-5 border border-[rgba(255,255,255,0.05)] hover:border-[#5e6ad2]/30 transition-all">
         <div className="flex items-start gap-4">
-          <AgentIcon name={agent.name} websiteUrl={agent.website_url} size="md" />
+          <AgentIcon name={agent.name} websiteUrl={agent.website_url} iconUrl={agent.icon_url} size="md" />
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
               <h3 className="font-semibold text-white text-[15px] truncate">{agent.name}</h3>

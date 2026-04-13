@@ -22,7 +22,7 @@ export function AgentCard({ agent }: { agent: Agent }) {
   return (
     <Link href={`/agent/${agent.slug}`} className="group block">
       <div className="flex items-start gap-3">
-        <AgentIcon name={agent.name} websiteUrl={agent.website_url} size="md" className="group-hover:brightness-110 transition-all duration-[0.16s]" />
+        <AgentIcon name={agent.name} websiteUrl={agent.website_url} iconUrl={agent.icon_url} size="md" className="group-hover:brightness-110 transition-all duration-[0.16s]" />
         <div className="flex-1 min-w-0">
           <h3 className="font-[510] text-[14px] text-[#f7f8f8] truncate tracking-[-0.01em]">{agent.name}</h3>
           <p className="text-[13px] text-[#8a8f98] truncate leading-[1.4]">{agent.tagline}</p>
@@ -53,7 +53,7 @@ export function AgentCardLarge({ agent }: { agent: Agent }) {
     <Link href={`/agent/${agent.slug}`} className="group block">
       <div className="bg-[#0f1011] rounded-[8px] border border-[rgba(255,255,255,0.05)] overflow-hidden hover:border-[rgba(255,255,255,0.1)] transition-all duration-[0.16s]">
         <div className="h-44 bg-gradient-to-br from-[#5e6ad2]/20 to-[#8b5cf6]/10 relative flex items-center justify-center">
-          <AgentIcon name={agent.name} websiteUrl={agent.website_url} size="xl" className="opacity-80" />
+          <AgentIcon name={agent.name} websiteUrl={agent.website_url} iconUrl={agent.icon_url} size="xl" className="opacity-80" />
           <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#0f1011] to-transparent p-5">
             <p className="text-[11px] font-[510] text-[#62666d] uppercase tracking-wider">{category?.name}</p>
             <h3 className="text-[16px] font-[590] text-[#f7f8f8] mt-1 tracking-[-0.01em]">{agent.name}</h3>
@@ -70,7 +70,7 @@ export function AgentCardGrid({ agent }: { agent: Agent }) {
     <Link href={`/agent/${agent.slug}`} className="group block">
       <div className="text-center">
         <div className="mx-auto group-hover:brightness-110 transition-all duration-[0.16s]">
-          <AgentIcon name={agent.name} websiteUrl={agent.website_url} size="lg" className="mx-auto" />
+          <AgentIcon name={agent.name} websiteUrl={agent.website_url} iconUrl={agent.icon_url} size="lg" className="mx-auto" />
         </div>
         <h3 className="font-[510] text-[12px] text-[#f7f8f8] mt-2 truncate tracking-[-0.01em]">{agent.name}</h3>
         <p className="text-[11px] text-[#62666d] truncate">{agent.tagline}</p>

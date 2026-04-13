@@ -74,7 +74,7 @@ export default function Home() {
           <div className="flex gap-4 mb-4 animate-[marquee-left_60s_linear_infinite]" style={{ width: "max-content" }}>
             {[...row1, ...row1].map((agent, i) => (
               <div key={`r1-${i}`} className="flex-shrink-0 opacity-60 hover:opacity-90 transition-opacity duration-[0.24s]">
-                <AgentIcon name={agent.name} websiteUrl={agent.website_url} size="md" />
+                <AgentIcon name={agent.name} websiteUrl={agent.website_url} iconUrl={agent.icon_url} size="md" />
               </div>
             ))}
           </div>
@@ -83,7 +83,7 @@ export default function Home() {
           <div className="flex gap-4 animate-[marquee-right_55s_linear_infinite]" style={{ width: "max-content" }}>
             {[...row2, ...row2].map((agent, i) => (
               <div key={`r2-${i}`} className="flex-shrink-0 opacity-60 hover:opacity-90 transition-opacity duration-[0.24s]">
-                <AgentIcon name={agent.name} websiteUrl={agent.website_url} size="md" />
+                <AgentIcon name={agent.name} websiteUrl={agent.website_url} iconUrl={agent.icon_url} size="md" />
               </div>
             ))}
           </div>
@@ -130,7 +130,7 @@ export default function Home() {
                 {approved.filter(a => a.featured).slice(0, 3).map((agent, i) => (
                   <div key={agent.id} className="flex items-center gap-2.5 px-1.5 py-1">
                     <span className="text-[11px] text-[#62666d] w-3 font-[510]">{i + 1}</span>
-                    <AgentIcon name={agent.name} websiteUrl={agent.website_url} size="sm" />
+                    <AgentIcon name={agent.name} websiteUrl={agent.website_url} iconUrl={agent.icon_url} size="sm" />
                     <div className="flex-1 min-w-0">
                       <p className="text-[13px] text-[#f7f8f8] font-[510] truncate tracking-[-0.01em]">{agent.name}</p>
                       <p className="text-[11px] text-[#62666d] truncate">{agent.tagline}</p>

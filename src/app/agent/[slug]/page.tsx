@@ -57,7 +57,7 @@ export default async function AgentPage({ params }: { params: Promise<{ slug: st
 
       {/* Hero */}
       <div className="flex flex-col md:flex-row gap-6 mb-10">
-        <AgentIcon name={agent.name} websiteUrl={agent.website_url} size="xl" />
+        <AgentIcon name={agent.name} websiteUrl={agent.website_url} iconUrl={agent.icon_url} size="xl" />
         <div className="flex-1">
           <h1 className="text-3xl font-bold text-white">{agent.name}</h1>
           <p className="text-lg text-[#8a8f98] mt-1">{agent.tagline}</p>

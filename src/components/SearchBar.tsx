@@ -85,7 +85,7 @@ export function SearchBar({ autoFocus = false }: { autoFocus?: boolean }) {
               onClick={() => setIsOpen(false)}
               className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors"
             >
-              <AgentIcon name={agent.name} websiteUrl={agent.website_url} size="sm" />
+              <AgentIcon name={agent.name} websiteUrl={agent.website_url} iconUrl={agent.icon_url} size="sm" />
               <div className="flex-1 min-w-0">
                 <p className="font-medium text-[14px] text-white truncate">{agent.name}</p>
                 <p className="text-[12px] text-[#8a8f98] truncate">{agent.tagline}</p>
