@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Search, SlidersHorizontal, Sparkles } from "lucide-react";
-import { agents, categories, b2bCategories, b2cCategories, getCategoryById } from "@/lib/data";
+import { agents as staticAgents, categories, b2bCategories, b2cCategories, getCategoryById } from "@/lib/data";
+import { getAllApprovedAgents } from "@/lib/db";
 import { Agent } from "@/lib/types";
 import { AgentCard, AgentCardGrid } from "@/components/AgentCard";
 import { CategoryIcon } from "@/components/CategoryIcon";
@@ -101,8 +102,15 @@ export default function DiscoverPage() {
   const [searched, setSearched] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState<Filters>({});
+  const [agents, setAgents] = useState<Agent[]>(staticAgents.filter((a) => a.status === "approved"));
 
-  const approvedAgents = agents.filter((a) => a.status === "approved");
+  useEffect(() => {
+    getAllApprovedAgents().then((dbAgents) => {
+      if (dbAgents.length > 0) setAgents(dbAgents);
+    }).catch(() => {});
+  }, []);
+
+  const approvedAgents = agents;
   const newest = [...approvedAgents].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()).slice(0, 6);
   const topFree = approvedAgents.filter((a) => a.pricing_type === "free").sort((a, b) => a.name.localeCompare(b.name)).slice(0, 10);
   const topPaid = approvedAgents.filter((a) => a.pricing_type !== "free").sort((a, b) => a.name.localeCompare(b.name)).slice(0, 10);

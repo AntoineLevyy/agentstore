@@ -1,16 +1,19 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getCategory, getAgentsByCategory, categories } from "@/lib/data";
+import { getCategory, categories } from "@/lib/data";
+import { getAgentsByCategory } from "@/lib/db";
 import { AgentCard } from "@/components/AgentCard";
 import { ChevronRight } from "lucide-react";
 import { CategoryIcon } from "@/components/CategoryIcon";
+
+export const revalidate = 60;
 
 export default async function CategoryPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const category = getCategory(slug);
   if (!category) notFound();
 
-  const categoryAgents = getAgentsByCategory(category.id);
+  const categoryAgents = await getAgentsByCategory(category.id);
 
   return (
     <div className="max-w-[1200px] mx-auto px-5 py-8">

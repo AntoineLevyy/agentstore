@@ -1,7 +1,9 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { searchAgents } from "@/lib/data";
+import { useState, useEffect } from "react";
+import { searchAgents as searchAgentsDB } from "@/lib/db";
+import { Agent } from "@/lib/types";
 import { AgentCard } from "@/components/AgentCard";
 import { SearchBar } from "@/components/SearchBar";
 import { Suspense } from "react";
@@ -9,7 +11,15 @@ import { Suspense } from "react";
 function SearchResults() {
   const searchParams = useSearchParams();
   const query = searchParams.get("q") || "";
-  const results = query ? searchAgents(query) : [];
+  const [results, setResults] = useState<Agent[]>([]);
+
+  useEffect(() => {
+    if (query) {
+      searchAgentsDB(query).then(setResults).catch(() => setResults([]));
+    } else {
+      setResults([]);
+    }
+  }, [query]);
 
   return (
     <div className="max-w-[1200px] mx-auto px-5 py-8">
