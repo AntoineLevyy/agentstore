@@ -9,24 +9,24 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Consumer AI — Find AI Apps That Actually Help Your Life",
+  title: "Every AI App — The Complete Directory of Consumer AI Apps",
   description:
-    "Discover 89+ AI apps for real life: career, health, finance, relationships, travel, shopping & more. Honest reviews, pricing, and what each app actually does for you.",
+    "Every AI app for real life in one place. Career, health, finance, relationships, travel, shopping & more. Reviews, pricing, and what each app actually does for you.",
   icons: {
     icon: "/favicon.png",
   },
   openGraph: {
-    title: "Consumer AI — Find AI Apps That Actually Help Your Life",
+    title: "Every AI App — The Complete Directory of Consumer AI Apps",
     description:
-      "Discover 89+ AI apps for real life: career, health, finance, relationships, travel, shopping & more.",
+      "Every AI app for real life in one place. Career, health, finance, relationships, travel, shopping & more.",
     type: "website",
-    siteName: "Consumer AI",
+    siteName: "Every AI App",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Consumer AI — Find AI Apps That Actually Help Your Life",
+    title: "Every AI App — The Complete Directory of Consumer AI Apps",
     description:
-      "Discover 89+ AI apps for real life: career, health, finance, relationships, travel, shopping & more.",
+      "Every AI app for real life in one place. Career, health, finance, relationships, travel, shopping & more.",
   },
 };
 

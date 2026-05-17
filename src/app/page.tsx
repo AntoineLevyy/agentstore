@@ -31,18 +31,18 @@ export default function Home() {
         <div className="relative max-w-5xl mx-auto px-5 pt-24 pb-16 text-center">
           <div className="inline-flex items-center gap-2 bg-white border border-black/[0.06] text-gray-600 text-[13px] font-medium px-3.5 py-2 rounded-full mb-8 shadow-sm">
             <Sparkles className="w-4 h-4 text-indigo-500" />
-            89 AI apps that actually do things for you
+            The complete consumer AI directory
           </div>
 
           <h1 className="text-[clamp(36px,5vw,56px)] font-bold text-gray-900 leading-[1.1] tracking-tight">
-            AI apps for your
+            Every AI app.
             <br />
-            <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">actual life.</span>
+            <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">For your actual life.</span>
           </h1>
 
           <p className="text-[17px] text-gray-600 mt-6 max-w-lg mx-auto leading-relaxed">
-            Not another chatbot list. Real AI agents that handle your job search,
-            manage your money, plan your trips, and coach your health.
+            Not another chatbot list. Every real AI app that handles your job search,
+            manages your money, plans your trips, and coaches your health — in one place.
           </p>
 
           <div className="flex items-center justify-center gap-3 mt-8">
@@ -181,7 +181,7 @@ export default function Home() {
             href="/discover"
             className="inline-flex items-center gap-2 h-11 px-6 bg-indigo-600 text-white font-semibold text-[14px] rounded-xl mt-8 hover:bg-indigo-700 transition-colors shadow-md shadow-indigo-200"
           >
-            Search 89 apps <Search className="w-4 h-4" />
+            Search all apps <Search className="w-4 h-4" />
           </Link>
         </div>
       </section>
@@ -194,9 +194,9 @@ export default function Home() {
               <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
                 <Sparkles className="w-3 h-3 text-white" />
               </div>
-              <span className="font-semibold text-[13px] text-gray-900">Consumer AI</span>
+              <span className="font-bold text-[13px] text-gray-900">every ai app</span>
             </div>
-            <p className="text-[12px] text-gray-500">89 apps · 11 categories · Updated May 2026</p>
+            <p className="text-[12px] text-gray-500">89+ apps · 11 categories · Updated May 2026</p>
           </div>
         </div>
       </footer>

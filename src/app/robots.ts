@@ -8,6 +8,6 @@ export default function robots(): MetadataRoute.Robots {
         allow: "/",
       },
     ],
-    sitemap: "https://consumerai.app/sitemap.xml",
+    sitemap: "https://everyaiapp.com/sitemap.xml",
   };
 }

@@ -4,6 +4,7 @@ import { agents, categories, getCategory } from "@/lib/data";
 import { ChevronRight, ExternalLink, Zap, ArrowRight, CheckCircle } from "lucide-react";
 import { AgentIcon } from "@/components/AgentIcon";
 import { AgentCard } from "@/components/AgentCard";
+import { Comments } from "@/components/Comments";
 import type { Metadata } from "next";
 
 const CATEGORY_ICONS: Record<string, string> = {
@@ -29,7 +30,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const agent = agents.find((a) => a.slug === slug);
   if (!agent) return {};
   return {
-    title: `${agent.name} — ${agent.jobToBeDone} | Consumer AI`,
+    title: `${agent.name} — ${agent.jobToBeDone} | Every AI App`,
     description: agent.jobToBeDone,
   };
 }
@@ -198,6 +199,11 @@ export default async function AgentPage({ params }: { params: Promise<{ slug: st
               Visit website <ExternalLink className="w-4 h-4" />
             </a>
           </div>
+        </div>
+
+        {/* Comments section */}
+        <div className="mt-10">
+          <Comments agentSlug={agent.slug} />
         </div>
       </section>
 

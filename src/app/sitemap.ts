@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { agents, categories } from "@/lib/data";
 
-const BASE_URL = "https://consumerai.app";
+const BASE_URL = "https://everyaiapp.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const staticPages: MetadataRoute.Sitemap = [
