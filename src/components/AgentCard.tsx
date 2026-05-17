@@ -1,85 +1,75 @@
 import Link from "next/link";
 import { Agent } from "@/lib/types";
 import { getCategoryById } from "@/lib/data";
-import { Star } from "lucide-react";
+import { ArrowRight, CheckCircle2, Sparkles, Star } from "lucide-react";
 import { AgentIcon } from "./AgentIcon";
 
-function PricingBadge({ agent }: { agent: Agent }) {
-  if (agent.pricing_type === "free") return <span className="text-[#5e6ad2] font-[510] text-[12px]">Free</span>;
-  if (agent.pricing_type === "contact") return <span className="text-[#62666d] font-[510] text-[12px]">Contact</span>;
-  const amount = agent.pricing_amount;
-  const period = agent.pricing_period === "monthly" ? "/mo" : agent.pricing_period === "yearly" ? "/yr" : agent.pricing_period === "per_use" ? "/use" : "";
-  return (
-    <span className="text-[#5e6ad2] font-[510] text-[12px]">
-      ${amount}{period}
-    </span>
-  );
+export function getPriceLabel(agent: Agent) {
+  if (agent.pricing_type === "free") return "Free";
+  if (agent.pricing_type === "contact") return "Contact";
+  const period = agent.pricing_period === "monthly" ? "/mo" : agent.pricing_period === "yearly" ? "/yr" : agent.pricing_period === "weekly" ? "/wk" : agent.pricing_period === "per_use" ? "/use" : "";
+  return agent.pricing_amount ? `$${agent.pricing_amount}${period}` : "Paid";
+}
+
+function makeJob(agent: Agent) {
+  const firstCapability = agent.capabilities[0]?.toLowerCase();
+  if (firstCapability) return `It can help with ${firstCapability}.`;
+  return agent.tagline;
+}
+
+export function AppSignal({ children, tone = "neutral" }: { children: React.ReactNode; tone?: "neutral" | "green" | "orange" }) {
+  const cls = tone === "green" ? "bg-[#e8f8ed] text-[#17673a]" : tone === "orange" ? "bg-[#fff0e8] text-[#a33d13]" : "bg-[#f3f0ea] text-[#6c6258]";
+  return <span className={`inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-[680] ${cls}`}>{children}</span>;
 }
 
 export function AgentCard({ agent }: { agent: Agent }) {
   const category = getCategoryById(agent.category_id);
+  const tools = agent.tools.slice(0, 2);
 
   return (
-    <Link href={`/agent/${agent.slug}`} className="group block">
-      <div className="flex items-start gap-3">
-        <AgentIcon name={agent.name} websiteUrl={agent.website_url} iconUrl={agent.icon_url} size="md" className="group-hover:brightness-110 transition-all duration-[0.16s]" />
-        <div className="flex-1 min-w-0">
-          <h3 className="font-[510] text-[14px] text-[#f7f8f8] truncate tracking-[-0.01em]">{agent.name}</h3>
-          <p className="text-[13px] text-[#8a8f98] truncate leading-[1.4]">{agent.tagline}</p>
-          <div className="flex items-center gap-2 mt-0.5">
-            {agent.rating_count > 0 && (
-              <div className="flex items-center gap-0.5">
-                <Star className="w-3 h-3 fill-[#62666d] text-[#62666d]" />
-                <span className="text-[11px] text-[#62666d]">{agent.rating_avg.toFixed(1)}</span>
-              </div>
-            )}
-            {category && <span className="text-[11px] text-[#62666d]">{category.name}</span>}
+    <Link href={`/agent/${agent.slug}`} className="group block h-full">
+      <article className="flex h-full flex-col rounded-[28px] bg-white p-5 shadow-[0_16px_50px_rgba(34,28,20,0.08)] ring-1 ring-black/[0.06] transition duration-200 hover:-translate-y-1 hover:shadow-[0_22px_70px_rgba(34,28,20,0.13)]">
+        <div className="flex items-start gap-4">
+          <AgentIcon name={agent.name} websiteUrl={agent.website_url} iconUrl={agent.icon_url} size="md" className="rounded-[18px] bg-[#f7f3ec] ring-1 ring-black/[0.04]" />
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center gap-2">
+              <h3 className="truncate text-[17px] font-[760] tracking-[-0.02em] text-[#191511]">{agent.name}</h3>
+              {agent.rating_count > 0 && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-[#fff7d8] px-2 py-0.5 text-[11px] font-[700] text-[#8a6500]">
+                  <Star className="h-3 w-3 fill-current" /> {Number(agent.rating_avg).toFixed(1)}
+                </span>
+              )}
+            </div>
+            <p className="mt-1 line-clamp-2 text-[13px] leading-5 text-[#6f675f]">{agent.tagline}</p>
           </div>
         </div>
-        <div className="flex-shrink-0 pt-0.5">
-          <div className="bg-[rgba(255,255,255,0.05)] rounded-[4px] px-3 py-1 text-center">
-            <PricingBadge agent={agent} />
-          </div>
+
+        <div className="mt-5 rounded-[22px] bg-[#fbf7ef] p-4">
+          <p className="flex items-start gap-2 text-[13px] font-[650] leading-5 text-[#2a241f]">
+            <Sparkles className="mt-0.5 h-4 w-4 shrink-0 text-[#ff6b35]" />
+            We have an app that does what you want: {makeJob(agent)}
+          </p>
         </div>
-      </div>
+
+        <div className="mt-4 flex flex-wrap gap-2">
+          {category && <AppSignal tone="orange">{category.name}</AppSignal>}
+          <AppSignal>{getPriceLabel(agent)}</AppSignal>
+          {tools.map((tool) => <AppSignal key={tool} tone="green">{tool}</AppSignal>)}
+        </div>
+
+        <div className="mt-auto flex items-center justify-between pt-5">
+          <span className="inline-flex items-center gap-1.5 text-[12px] font-[680] text-[#6c6258]"><CheckCircle2 className="h-3.5 w-3.5 text-[#39a96b]" /> Checked listing</span>
+          <span className="inline-flex items-center gap-1 text-[13px] font-[760] text-[#171411]">Details <ArrowRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5" /></span>
+        </div>
+      </article>
     </Link>
   );
 }
 
 export function AgentCardLarge({ agent }: { agent: Agent }) {
-  const category = getCategoryById(agent.category_id);
-
-  return (
-    <Link href={`/agent/${agent.slug}`} className="group block">
-      <div className="bg-[#0f1011] rounded-[8px] border border-[rgba(255,255,255,0.05)] overflow-hidden hover:border-[rgba(255,255,255,0.1)] transition-all duration-[0.16s]">
-        <div className="h-44 bg-gradient-to-br from-[#5e6ad2]/20 to-[#8b5cf6]/10 relative flex items-center justify-center">
-          <AgentIcon name={agent.name} websiteUrl={agent.website_url} iconUrl={agent.icon_url} size="xl" className="opacity-80" />
-          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#0f1011] to-transparent p-5">
-            <p className="text-[11px] font-[510] text-[#62666d] uppercase tracking-wider">{category?.name}</p>
-            <h3 className="text-[16px] font-[590] text-[#f7f8f8] mt-1 tracking-[-0.01em]">{agent.name}</h3>
-            <p className="text-[13px] text-[#8a8f98] mt-0.5 truncate">{agent.tagline}</p>
-          </div>
-        </div>
-      </div>
-    </Link>
-  );
+  return <AgentCard agent={agent} />;
 }
 
 export function AgentCardGrid({ agent }: { agent: Agent }) {
-  return (
-    <Link href={`/agent/${agent.slug}`} className="group block">
-      <div className="text-center">
-        <div className="mx-auto group-hover:brightness-110 transition-all duration-[0.16s]">
-          <AgentIcon name={agent.name} websiteUrl={agent.website_url} iconUrl={agent.icon_url} size="lg" className="mx-auto" />
-        </div>
-        <h3 className="font-[510] text-[12px] text-[#f7f8f8] mt-2 truncate tracking-[-0.01em]">{agent.name}</h3>
-        <p className="text-[11px] text-[#62666d] truncate">{agent.tagline}</p>
-        <div className="mt-1">
-          <div className="inline-block bg-[rgba(255,255,255,0.05)] rounded-[4px] px-2 py-0.5">
-            <PricingBadge agent={agent} />
-          </div>
-        </div>
-      </div>
-    </Link>
-  );
+  return <AgentCard agent={agent} />;
 }
