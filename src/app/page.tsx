@@ -50,14 +50,14 @@ export default function Home() {
           </div>
 
           <h1 className="text-[clamp(38px,5.5vw,60px)] font-bold text-gray-900 leading-[1.08] tracking-tight">
-            Every AI app.
+            Discover AI apps
             <br />
-            <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">For your actual life.</span>
+            <span className="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 bg-clip-text text-transparent">that do the work for you.</span>
           </h1>
 
-          <p className="text-[18px] text-gray-600 mt-7 max-w-lg mx-auto leading-relaxed">
-            Not another chatbot list. Every real AI app that handles your job search,
-            manages your money, plans your trips, and coaches your health.
+          <p className="text-[18px] text-gray-500 mt-7 max-w-xl mx-auto leading-relaxed">
+            89 consumer AI apps rated by how autonomous they actually are.
+            Job search, health, finance, travel, dating, style &mdash; browse by what you need done.
           </p>
 
           <div className="flex items-center justify-center gap-3 mt-10">
@@ -75,22 +75,22 @@ export default function Home() {
             </Link>
           </div>
         </div>
-      </section>
 
-      {/* Category pills */}
-      <section className="max-w-6xl mx-auto px-5 -mt-6">
-        <div className="flex flex-wrap justify-center gap-2.5">
-          {categories.map((cat) => (
-            <Link
-              key={cat.id}
-              href={`/category/${cat.slug}`}
-              className="inline-flex items-center gap-2 bg-white border border-black/[0.06] text-gray-700 text-[13px] font-medium px-4 py-2.5 rounded-full hover:shadow-md hover:border-black/[0.1] transition-all duration-200"
-            >
-              <span className="text-base">{CATEGORY_ICONS[cat.slug] || "\u{1F4F1}"}</span>
-              {cat.name}
-              <span className="text-gray-400 text-[12px]">{cat.agentCount}</span>
-            </Link>
-          ))}
+        {/* Category pills */}
+        <div className="relative max-w-6xl mx-auto px-5 pb-14">
+          <div className="flex flex-wrap justify-center gap-2.5">
+            {categories.map((cat) => (
+              <Link
+                key={cat.id}
+                href={`/category/${cat.slug}`}
+                className="inline-flex items-center gap-2 bg-white border border-black/[0.06] text-gray-700 text-[13px] font-medium px-4 py-2.5 rounded-full hover:shadow-md hover:border-black/[0.1] transition-all duration-200"
+              >
+                <span className="text-base">{CATEGORY_ICONS[cat.slug] || "\u{1F4F1}"}</span>
+                {cat.name}
+                <span className="text-gray-400 text-[12px]">{cat.agentCount}</span>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 
