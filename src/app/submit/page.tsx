@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { categories } from "@/lib/data";
 import { submitAgent } from "@/lib/db";
@@ -122,9 +123,9 @@ export default function SubmitPage() {
           Your agent <strong>{form.name}</strong> has been submitted for review.
           We&apos;ll review it and get back to you within 24-48 hours.
         </p>
-        <a href="/" className="inline-block mt-6 bg-[#5e6ad2] text-white font-semibold px-6 py-3 rounded-full hover:bg-[#6d78d5] transition-colors text-sm">
+        <Link href="/" className="inline-block mt-6 bg-[#5e6ad2] text-white font-semibold px-6 py-3 rounded-full hover:bg-[#6d78d5] transition-colors text-sm">
           Back to Home
-        </a>
+        </Link>
       </div>
     );
   }
