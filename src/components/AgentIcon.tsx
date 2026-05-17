@@ -16,6 +16,27 @@ function getFaviconUrl(websiteUrl: string): string | null {
   return `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
 }
 
+// Generate a consistent color from a string
+function getColorFromName(name: string): string {
+  const colors = [
+    "bg-indigo-100 text-indigo-700",
+    "bg-purple-100 text-purple-700",
+    "bg-pink-100 text-pink-700",
+    "bg-rose-100 text-rose-700",
+    "bg-orange-100 text-orange-700",
+    "bg-amber-100 text-amber-700",
+    "bg-emerald-100 text-emerald-700",
+    "bg-teal-100 text-teal-700",
+    "bg-cyan-100 text-cyan-700",
+    "bg-blue-100 text-blue-700",
+  ];
+  let hash = 0;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return colors[Math.abs(hash) % colors.length];
+}
+
 interface AgentIconProps {
   name: string;
   websiteUrl: string;
@@ -25,22 +46,22 @@ interface AgentIconProps {
 }
 
 const sizeClasses = {
-  sm: "w-10 h-10 text-lg",
-  md: "w-16 h-16 text-2xl",
-  lg: "w-20 h-20 text-3xl",
-  xl: "w-32 h-32 text-5xl",
+  sm: "w-9 h-9 text-sm",
+  md: "w-12 h-12 text-lg",
+  lg: "w-16 h-16 text-2xl",
+  xl: "w-20 h-20 text-3xl",
 };
 
 export function AgentIcon({ name, websiteUrl, iconUrl, size = "md", className = "" }: AgentIconProps) {
   const [imgError, setImgError] = useState(false);
   const [fallbackError, setFallbackError] = useState(false);
 
-  // Priority: icon_url > favicon > letter
   const primaryUrl = iconUrl && iconUrl.trim() ? iconUrl : null;
   const fallbackUrl = getFaviconUrl(websiteUrl);
+  const colorClass = getColorFromName(name);
 
   return (
-    <div className={`${sizeClasses[size]} rounded-[8px] bg-[#0f1011] border border-[rgba(255,255,255,0.05)] flex-shrink-0 overflow-hidden flex items-center justify-center ${className}`}>
+    <div className={`${sizeClasses[size]} rounded-xl bg-gray-100 border border-black/[0.04] flex-shrink-0 overflow-hidden flex items-center justify-center ${className}`}>
       {primaryUrl && !imgError ? (
         <img
           src={primaryUrl}
@@ -56,7 +77,9 @@ export function AgentIcon({ name, websiteUrl, iconUrl, size = "md", className = 
           onError={() => setFallbackError(true)}
         />
       ) : (
-        <span className="font-[510] text-[#62666d]">{name[0]}</span>
+        <div className={`w-full h-full flex items-center justify-center font-bold ${colorClass}`}>
+          {name[0]}
+        </div>
       )}
     </div>
   );

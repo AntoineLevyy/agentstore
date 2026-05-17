@@ -1,375 +1,202 @@
 import Link from "next/link";
-import { agents, b2bCategories, b2cCategories } from "@/lib/data";
-import { AgentIcon } from "@/components/AgentIcon";
-import { ArrowRight, Search, Layers, Zap, Globe } from "lucide-react";
-import { CategoryIcon } from "@/components/CategoryIcon";
+import { agents, categories } from "@/lib/data";
+import { AgentCardFeatured, AgentCard } from "@/components/AgentCard";
+import { ArrowRight, Search, Sparkles, TrendingUp, Shield, Zap } from "lucide-react";
 
-function stableAgentScore(value: string) {
-  return Array.from(value).reduce((score, char) => score + char.charCodeAt(0), 0);
-}
+const CATEGORY_ICONS: Record<string, string> = {
+  "career-job-search": "💼",
+  "companion-life-coach": "🧠",
+  "dressing-style": "👗",
+  "family-parenting": "👨‍👩‍👧",
+  "health-wellness-fitness": "💪",
+  "home-real-estate": "🏠",
+  "learning-tutoring": "📚",
+  "personal-finance": "💰",
+  "relationship-dating": "❤️",
+  "shopping-purchase-decisions": "🛍️",
+  "travel-organiser": "✈️",
+};
 
 export default function Home() {
-  const approved = agents.filter((a) => a.status === "approved");
-  // Two rows for the rolling marquee — pick 40 agents, split into 2 rows of 20
-  const marqueeAgents = approved
-    .filter((a) => a.website_url)
-    .sort((a, b) => stableAgentScore(a.slug) - stableAgentScore(b.slug))
-    .slice(0, 40);
-  const row1 = marqueeAgents.slice(0, 20);
-  const row2 = marqueeAgents.slice(20, 40);
-  const b2bStats = b2bCategories.map((c) => ({
-    ...c,
-    count: approved.filter((a) => a.category_id === c.id).length,
-  }));
-  const b2cStats = b2cCategories.map((c) => ({
-    ...c,
-    count: approved.filter((a) => a.category_id === c.id).length,
-  }));
+  const featured = agents.filter((a) => a.relevanceScore >= 5 && a.agenticDepth >= 4).slice(0, 3);
+  const highAutonomy = agents.filter((a) => a.agenticDepth >= 4).slice(0, 6);
 
   return (
     <div>
-      {/* ─── Hero ────────────────────────────────────────────── */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-b from-[#5e6ad2]/[0.02] via-transparent to-transparent pointer-events-none" />
+      {/* Hero */}
+      <section className="relative overflow-hidden bg-gradient-to-b from-indigo-50/80 via-white to-white">
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(99,102,241,0.06),transparent_50%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(168,85,247,0.04),transparent_50%)]" />
 
-        <div className="relative max-w-[1200px] mx-auto px-5 pt-32 pb-16 text-center">
-          <div className="inline-flex items-center gap-2 bg-[rgba(255,255,255,0.02)] border border-[rgba(255,255,255,0.05)] text-[#8a8f98] text-[12px] font-[510] px-3 py-1.5 rounded-[4px] mb-10">
-            <img
-              src="https://res.cloudinary.com/djklousbo/image/upload/v1775356040/logo_agentstore.png_fmokea.jpg"
-              alt="Agent Store"
-              className="h-3.5 w-3.5 rounded-[2px]"
-            />
-            Agent Store
+        <div className="relative max-w-5xl mx-auto px-5 pt-24 pb-16 text-center">
+          <div className="inline-flex items-center gap-2 bg-white border border-black/[0.06] text-gray-600 text-[13px] font-medium px-3.5 py-2 rounded-full mb-8 shadow-sm">
+            <Sparkles className="w-4 h-4 text-indigo-500" />
+            89 AI apps that actually do things for you
           </div>
 
-          <h1 className="text-[64px] md:text-[80px] font-[510] text-[#f7f8f8] leading-[1.0] tracking-[-1.6px]">
-            Find the right agent
+          <h1 className="text-[clamp(36px,5vw,56px)] font-bold text-gray-900 leading-[1.1] tracking-tight">
+            AI apps for your
             <br />
-            for every task.
+            <span className="bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">actual life.</span>
           </h1>
 
-          <p className="text-[15px] text-[#8a8f98] mt-8 max-w-md mx-auto leading-[24px] tracking-[-0.165px]">
-            500+ AI agents. 18 categories.
-            <br className="hidden md:block" />
-            Searchable by humans. Discoverable by machines.
+          <p className="text-[17px] text-gray-600 mt-6 max-w-lg mx-auto leading-relaxed">
+            Not another chatbot list. Real AI agents that handle your job search,
+            manage your money, plan your trips, and coach your health.
           </p>
 
-          <div className="flex items-center justify-center gap-3 mt-10">
+          <div className="flex items-center justify-center gap-3 mt-8">
             <Link
               href="/discover"
-              className="inline-flex items-center h-[32px] px-4 bg-[#5e6ad2] text-white font-[510] text-[13px] rounded-[4px] hover:bg-[#6d78d5] transition-all duration-[0.16s]"
+              className="inline-flex items-center gap-2 h-11 px-6 bg-indigo-600 text-white font-semibold text-[14px] rounded-xl hover:bg-indigo-700 transition-colors shadow-md shadow-indigo-200"
             >
-              Explore the Store
+              Find your app <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
-              href="/mcp"
-              className="inline-flex items-center h-[32px] px-4 bg-transparent text-[#8a8f98] font-[510] text-[13px] rounded-[4px] hover:text-[#d0d6e0] hover:bg-[rgba(255,255,255,0.03)] transition-all duration-[0.16s]"
+              href="/categories"
+              className="inline-flex items-center h-11 px-6 bg-white text-gray-700 font-semibold text-[14px] rounded-xl border border-black/[0.1] hover:bg-gray-50 transition-colors"
             >
-              MCP Protocol
+              Browse categories
             </Link>
-          </div>
-        </div>
-
-        {/* Rolling logo marquee */}
-        <div className="relative mt-12 pb-16" aria-hidden="true">
-          {/* Fade edges */}
-          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#08090a] to-transparent z-10 pointer-events-none" />
-          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#08090a] to-transparent z-10 pointer-events-none" />
-
-          {/* Row 1 — scrolls left */}
-          <div className="flex gap-4 mb-4 animate-[marquee-left_60s_linear_infinite]" style={{ width: "max-content" }}>
-            {[...row1, ...row1].map((agent, i) => (
-              <div key={`r1-${i}`} className="flex-shrink-0 opacity-60 hover:opacity-90 transition-opacity duration-[0.24s]">
-                <AgentIcon name={agent.name} websiteUrl={agent.website_url} iconUrl={agent.icon_url} size="md" />
-              </div>
-            ))}
-          </div>
-
-          {/* Row 2 — scrolls right */}
-          <div className="flex gap-4 animate-[marquee-right_55s_linear_infinite]" style={{ width: "max-content" }}>
-            {[...row2, ...row2].map((agent, i) => (
-              <div key={`r2-${i}`} className="flex-shrink-0 opacity-60 hover:opacity-90 transition-opacity duration-[0.24s]">
-                <AgentIcon name={agent.name} websiteUrl={agent.website_url} iconUrl={agent.icon_url} size="md" />
-              </div>
-            ))}
           </div>
         </div>
       </section>
 
-      {/* ─── Divider ─────────────────────────────────────────── */}
-      <div className="border-t border-[rgba(255,255,255,0.05)]" />
-
-      {/* ─── Designed for Discovery ──────────────────────────── */}
-      <section className="max-w-[1200px] mx-auto px-5 py-24">
-        <div className="max-w-2xl mb-16">
-          <p className="text-[13px] font-[510] text-[#5e6ad2] mb-4 tracking-[-0.01em]">Designed for Discovery</p>
-          <h2 className="text-[48px] font-[510] text-[#f7f8f8] leading-[48px] tracking-[-1.056px]">
-            Find what you need.
-          </h2>
-          <h2 className="text-[48px] font-[510] text-[#8a8f98] leading-[48px] tracking-[-1.056px]">
-            Not what&apos;s trending.
-          </h2>
-        </div>
-
-        {/* Search feature — full width */}
-        <div className="bg-[#0f1011] rounded-[8px] p-8 md:p-10 border border-[rgba(255,255,255,0.05)] mb-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-            <div>
-              <p className="text-[12px] font-[510] text-[#5e6ad2] mb-3">Task-Based Search</p>
-              <h3 className="text-[20px] font-[590] text-[#d0d6e0] leading-[26.6px] tracking-[-0.24px]">
-                Describe your task.
-                <br />Get matched instantly.
-              </h3>
-              <p className="text-[15px] text-[#8a8f98] mt-4 leading-[24px] tracking-[-0.165px] max-w-sm">
-                Tell us what you need in your own words. Our engine matches you with agents that have the right capabilities, tools, and data.
-              </p>
-              <Link href="/discover" className="inline-flex items-center gap-1.5 h-[32px] px-4 bg-[#5e6ad2] text-white font-[510] text-[13px] rounded-[4px] mt-6 hover:bg-[#6d78d5] transition-all duration-[0.16s]">
-                Try it now <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
-            </div>
-            <div className="bg-[#08090a] rounded-[8px] p-5 border border-[rgba(255,255,255,0.05)]">
-              <div className="flex items-center gap-2 bg-[rgba(255,255,255,0.02)] rounded-[6px] px-3 py-2.5 mb-3 border border-[rgba(255,255,255,0.05)]">
-                <Search className="w-3.5 h-3.5 text-[#62666d]" />
-                <span className="text-[13px] text-[#62666d] tracking-[-0.01em]">&ldquo;automate customer support for my store&rdquo;</span>
-              </div>
-              <div className="space-y-2">
-                {approved.filter(a => a.featured).slice(0, 3).map((agent, i) => (
-                  <div key={agent.id} className="flex items-center gap-2.5 px-1.5 py-1">
-                    <span className="text-[11px] text-[#62666d] w-3 font-[510]">{i + 1}</span>
-                    <AgentIcon name={agent.name} websiteUrl={agent.website_url} iconUrl={agent.icon_url} size="sm" />
-                    <div className="flex-1 min-w-0">
-                      <p className="text-[13px] text-[#f7f8f8] font-[510] truncate tracking-[-0.01em]">{agent.name}</p>
-                      <p className="text-[11px] text-[#62666d] truncate">{agent.tagline}</p>
-                    </div>
-                    <span className="text-[11px] text-[#5e6ad2] font-[510]">{92 - i * 11}%</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Three feature cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-[#0f1011] rounded-[8px] p-6 border border-[rgba(255,255,255,0.05)] hover:border-[rgba(255,255,255,0.08)] transition-all duration-[0.16s]">
-            <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-8 h-8 rounded-[6px] bg-[rgba(94,106,210,0.15)] flex items-center justify-center">
-                <Layers className="w-4 h-4 text-[#5e6ad2]" />
-              </div>
-              <p className="text-[12px] font-[510] text-[#62666d] uppercase tracking-wider">Catalog</p>
-            </div>
-            <h3 className="text-[16px] font-[590] text-[#d0d6e0] leading-[24px]">18 categories. 500+ agents.</h3>
-            <p className="text-[13px] text-[#62666d] mt-2 leading-[19.5px]">
-              Capabilities, tools, pricing, and what makes each one unique.
-            </p>
-            <Link href="/discover" className="inline-flex items-center gap-1 text-[#5e6ad2] text-[12px] font-[510] mt-4 hover:text-[#6d78d5] transition-colors duration-[0.1s]">
-              Browse <ArrowRight className="w-3 h-3" />
+      {/* Category pills */}
+      <section className="max-w-6xl mx-auto px-5 -mt-4">
+        <div className="flex flex-wrap justify-center gap-2">
+          {categories.map((cat) => (
+            <Link
+              key={cat.id}
+              href={`/category/${cat.slug}`}
+              className="inline-flex items-center gap-2 bg-white border border-black/[0.06] text-gray-700 text-[13px] font-medium px-4 py-2.5 rounded-xl hover:shadow-md hover:border-black/[0.1] transition-all duration-200"
+            >
+              <span className="text-base">{CATEGORY_ICONS[cat.slug] || "📱"}</span>
+              {cat.name}
+              <span className="text-gray-400 text-[12px]">{cat.agentCount}</span>
             </Link>
-          </div>
+          ))}
+        </div>
+      </section>
 
-          <div className="bg-[#0f1011] rounded-[8px] p-6 border border-[rgba(255,255,255,0.05)] hover:border-[rgba(255,255,255,0.08)] transition-all duration-[0.16s]">
-            <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-8 h-8 rounded-[6px] bg-[rgba(16,185,129,0.15)] flex items-center justify-center">
-                <Zap className="w-4 h-4 text-[#10b981]" />
-              </div>
-              <p className="text-[12px] font-[510] text-[#62666d] uppercase tracking-wider">Filters</p>
+      {/* Value props */}
+      <section className="max-w-6xl mx-auto px-5 py-20">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          <div className="bg-white rounded-2xl border border-black/[0.06] p-6 shadow-[var(--shadow-sm)]">
+            <div className="w-10 h-10 rounded-xl bg-indigo-50 flex items-center justify-center mb-4">
+              <Zap className="w-5 h-5 text-indigo-600" />
             </div>
-            <h3 className="text-[16px] font-[590] text-[#d0d6e0] leading-[24px]">Filter by what matters.</h3>
-            <p className="text-[13px] text-[#62666d] mt-2 leading-[19.5px]">
-              Pricing, tools, capabilities, integrations. Find exactly what fits.
+            <h3 className="font-semibold text-[16px] text-gray-900">Real autonomy scores</h3>
+            <p className="text-[14px] text-gray-600 mt-2 leading-relaxed">
+              Every app rated 1-5 on how much it actually does for you vs. just assisting.
             </p>
           </div>
-
-          <div className="bg-[#0f1011] rounded-[8px] p-6 border border-[rgba(255,255,255,0.05)] hover:border-[rgba(255,255,255,0.08)] transition-all duration-[0.16s]">
-            <div className="flex items-center gap-2.5 mb-4">
-              <div className="w-8 h-8 rounded-[6px] bg-[rgba(251,146,60,0.15)] flex items-center justify-center">
-                <Globe className="w-4 h-4 text-[#fb923c]" />
-              </div>
-              <p className="text-[12px] font-[510] text-[#62666d] uppercase tracking-wider">Resources</p>
+          <div className="bg-white rounded-2xl border border-black/[0.06] p-6 shadow-[var(--shadow-sm)]">
+            <div className="w-10 h-10 rounded-xl bg-emerald-50 flex items-center justify-center mb-4">
+              <TrendingUp className="w-5 h-5 text-emerald-600" />
             </div>
-            <h3 className="text-[16px] font-[590] text-[#d0d6e0] leading-[24px]">Docs, tutorials, reviews.</h3>
-            <p className="text-[13px] text-[#62666d] mt-2 leading-[19.5px]">
-              Official docs, community guides, and YouTube reviews for every agent.
+            <h3 className="font-semibold text-[16px] text-gray-900">Consumer jobs, not features</h3>
+            <p className="text-[14px] text-gray-600 mt-2 leading-relaxed">
+              Organized by what you&apos;re trying to accomplish, not what the tech does.
+            </p>
+          </div>
+          <div className="bg-white rounded-2xl border border-black/[0.06] p-6 shadow-[var(--shadow-sm)]">
+            <div className="w-10 h-10 rounded-xl bg-amber-50 flex items-center justify-center mb-4">
+              <Shield className="w-5 h-5 text-amber-600" />
+            </div>
+            <h3 className="font-semibold text-[16px] text-gray-900">Honest &ldquo;why not ChatGPT?&rdquo;</h3>
+            <p className="text-[14px] text-gray-600 mt-2 leading-relaxed">
+              Every app explains what it does better than a general chatbot.
             </p>
           </div>
         </div>
       </section>
 
-      {/* ─── Divider ─────────────────────────────────────────── */}
-      <div className="border-t border-[rgba(255,255,255,0.05)]" />
-
-      {/* ─── Built for AI Systems ────────────────────────────── */}
-      <section className="max-w-[1200px] mx-auto px-5 py-24">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+      {/* Featured — most autonomous consumer apps */}
+      <section className="max-w-6xl mx-auto px-5 pb-16">
+        <div className="flex items-center justify-between mb-6">
           <div>
-            <p className="text-[13px] font-[510] text-[#8b5cf6] mb-4 tracking-[-0.01em]">Built for AI Systems</p>
-            <h2 className="text-[48px] font-[510] text-[#f7f8f8] leading-[48px] tracking-[-1.056px]">
-              The discovery
-            </h2>
-            <h2 className="text-[48px] font-[510] text-[#8a8f98] leading-[48px] tracking-[-1.056px]">
-              layer for agents.
-            </h2>
-            <p className="text-[15px] text-[#8a8f98] mt-6 leading-[24px] tracking-[-0.165px] max-w-md">
-              Connect any MCP-compatible AI system. When it needs to delegate a task, it queries our endpoint and gets the best match. Ranked by relevance, not by who paid more.
-            </p>
-            <div className="flex items-center gap-3 mt-8">
-              <Link
-                href="/mcp"
-                className="inline-flex items-center h-[32px] px-4 bg-[#5e6ad2] text-white font-[510] text-[13px] rounded-[4px] hover:bg-[#6d78d5] transition-all duration-[0.16s]"
-              >
-                View MCP Docs
-              </Link>
-              <a
-                href="/.well-known/mcp.json"
-                target="_blank"
-                className="text-[#62666d] text-[12px] font-[510] hover:text-[#8a8f98] transition-colors duration-[0.1s]"
-              >
-                /.well-known/mcp.json
-              </a>
-            </div>
+            <h2 className="text-[24px] font-bold text-gray-900">Most autonomous apps</h2>
+            <p className="text-[14px] text-gray-500 mt-1">These actually do the work, not just help you do it</p>
           </div>
-          <div className="bg-[#0f1011] rounded-[8px] p-6 border border-[rgba(255,255,255,0.05)] font-mono text-[12.25px] leading-[15.925px] tracking-[-0.182px]">
-            <div className="flex items-center gap-1.5 mb-4">
-              <div className="w-2.5 h-2.5 rounded-full bg-[#eb5757]/60" />
-              <div className="w-2.5 h-2.5 rounded-full bg-[hsl(46,87%,65%)]/60" />
-              <div className="w-2.5 h-2.5 rounded-full bg-[#10b981]/60" />
-              <span className="text-[11px] text-[#62666d] ml-1.5 font-sans font-[510]">MCP JSON-RPC</span>
-            </div>
-            <p className="text-[#62666d]">{"// “What can help with this task?”"}</p>
-            <p className="text-[#d0d6e0] mt-1">{"{"}</p>
-            <p className="text-[#d0d6e0] ml-4"><span className="text-[#5e6ad2]">&quot;method&quot;</span>: <span className="text-[#10b981]">&quot;tools/call&quot;</span>,</p>
-            <p className="text-[#d0d6e0] ml-4"><span className="text-[#5e6ad2]">&quot;params&quot;</span>: {"{"}</p>
-            <p className="text-[#d0d6e0] ml-8"><span className="text-[#5e6ad2]">&quot;name&quot;</span>: <span className="text-[#10b981]">&quot;find_agent_for_task&quot;</span>,</p>
-            <p className="text-[#d0d6e0] ml-8"><span className="text-[#5e6ad2]">&quot;arguments&quot;</span>: {"{"}</p>
-            <p className="text-[#d0d6e0] ml-12"><span className="text-[#5e6ad2]">&quot;task&quot;</span>: <span className="text-[#10b981]">&quot;analyze customer churn&quot;</span></p>
-            <p className="text-[#d0d6e0] ml-8">{"}"}</p>
-            <p className="text-[#d0d6e0] ml-4">{"}"}</p>
-            <p className="text-[#d0d6e0]">{"}"}</p>
-            <div className="border-t border-[rgba(255,255,255,0.05)] my-3" />
-            <p className="text-[#62666d]">{"// Ranked from 500+ agents"}</p>
-            <p className="text-[#d0d6e0] mt-1">→ Julius AI <span className="text-[#62666d] ml-1">92%</span></p>
-            <p className="text-[#d0d6e0]">→ Amplitude <span className="text-[#62666d] ml-1">78%</span></p>
-            <p className="text-[#d0d6e0]">→ Mixpanel Spark <span className="text-[#62666d] ml-1">71%</span></p>
+          <Link href="/discover?sort=autonomy" className="text-[13px] font-medium text-indigo-600 hover:text-indigo-800 flex items-center gap-1">
+            See all <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+          {featured.map((agent) => (
+            <AgentCardFeatured key={agent.id} agent={agent} />
+          ))}
+        </div>
+      </section>
+
+      {/* By category — top picks */}
+      <section className="bg-white border-t border-black/[0.04]">
+        <div className="max-w-6xl mx-auto px-5 py-20">
+          <h2 className="text-[24px] font-bold text-gray-900 mb-2">Browse by what you need</h2>
+          <p className="text-[14px] text-gray-500 mb-10">11 categories of AI apps for real consumer jobs</p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {categories.map((cat) => {
+              const catAgents = agents.filter((a) => a.categorySlug === cat.slug).slice(0, 2);
+              return (
+                <Link
+                  key={cat.id}
+                  href={`/category/${cat.slug}`}
+                  className="group bg-gray-50 hover:bg-white rounded-2xl border border-black/[0.04] hover:border-black/[0.08] p-5 hover:shadow-[var(--shadow-md)] transition-all duration-200"
+                >
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="text-2xl">{CATEGORY_ICONS[cat.slug] || "📱"}</span>
+                    <div>
+                      <h3 className="font-semibold text-[15px] text-gray-900 group-hover:text-indigo-700 transition-colors">{cat.name}</h3>
+                      <p className="text-[12px] text-gray-500">{cat.agentCount} apps</p>
+                    </div>
+                  </div>
+                  <p className="text-[13px] text-gray-600 leading-relaxed line-clamp-2">{cat.description}</p>
+                  {catAgents.length > 0 && (
+                    <div className="mt-3 pt-3 border-t border-black/[0.04]">
+                      <div className="flex items-center gap-2 text-[12px] text-gray-500">
+                        <span className="font-medium">Top picks:</span>
+                        {catAgents.map((a) => a.name).join(", ")}
+                      </div>
+                    </div>
+                  )}
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>
 
-      {/* ─── Divider ─────────────────────────────────────────── */}
-      <div className="border-t border-[rgba(255,255,255,0.05)]" />
-
-      {/* ─── Category grids ──────────────────────────────────── */}
-      <section className="max-w-[1200px] mx-auto px-5 py-24">
-        {/* B2B */}
-        <div className="mb-16">
-          <div className="flex items-center gap-3 mb-6">
-            <span className="text-[12px] font-[510] text-[#5e6ad2] bg-[rgba(94,106,210,0.12)] px-2.5 py-1 rounded-[4px]">For Work</span>
-            <h2 className="text-[20px] font-[590] text-[#d0d6e0] tracking-[-0.24px]">Business & Professional</h2>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
-            {b2bStats.map((cat) => (
-              <Link
-                key={cat.id}
-                href={`/category/${cat.slug}`}
-                className="bg-[#0f1011] rounded-[8px] p-5 border border-[rgba(255,255,255,0.05)] hover:border-[rgba(255,255,255,0.08)] hover:bg-[#101112] transition-all duration-[0.16s]"
-              >
-                <CategoryIcon slug={cat.slug} size="lg" />
-                <p className="font-[590] text-[14px] text-[#d0d6e0] mt-3 tracking-[-0.01em]">{cat.name}</p>
-                <p className="text-[12px] text-[#62666d] font-[510] mt-0.5">{cat.count} agents</p>
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* B2C */}
-        <div>
-          <div className="flex items-center gap-3 mb-6">
-            <span className="text-[12px] font-[510] text-[#10b981] bg-[rgba(16,185,129,0.12)] px-2.5 py-1 rounded-[4px]">For Life</span>
-            <h2 className="text-[20px] font-[590] text-[#d0d6e0] tracking-[-0.24px]">Personal & Everyday</h2>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-            {b2cStats.map((cat) => (
-              <Link
-                key={cat.id}
-                href={`/category/${cat.slug}`}
-                className="bg-[#0f1011] rounded-[8px] p-5 border border-[rgba(255,255,255,0.05)] hover:border-[rgba(255,255,255,0.08)] hover:bg-[#101112] transition-all duration-[0.16s]"
-              >
-                <CategoryIcon slug={cat.slug} size="lg" />
-                <p className="font-[590] text-[14px] text-[#d0d6e0] mt-3 tracking-[-0.01em]">{cat.name}</p>
-                <p className="text-[12px] text-[#62666d] font-[510] mt-0.5">{cat.count} agents</p>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ─── Divider ─────────────────────────────────────────── */}
-      <div className="border-t border-[rgba(255,255,255,0.05)]" />
-
-      {/* ─── Final CTA ───────────────────────────────────────── */}
-      <section className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-t from-[#5e6ad2]/[0.02] to-transparent pointer-events-none" />
-        <div className="relative max-w-[1200px] mx-auto px-5 py-28 text-center">
-          <h2 className="text-[48px] font-[510] text-[#f7f8f8] leading-[48px] tracking-[-1.056px]">
-            Start discovering.
+      {/* CTA */}
+      <section className="bg-gradient-to-b from-white to-indigo-50/50">
+        <div className="max-w-4xl mx-auto px-5 py-20 text-center">
+          <h2 className="text-[28px] font-bold text-gray-900">
+            Stop scrolling. Start doing.
           </h2>
-          <p className="text-[15px] text-[#8a8f98] mt-5 max-w-sm mx-auto leading-[24px] tracking-[-0.165px]">
-            500+ AI agents. 18 categories. One search away.
+          <p className="text-[15px] text-gray-600 mt-3 max-w-md mx-auto">
+            Find the AI app that handles the thing you&apos;ve been putting off.
           </p>
           <Link
             href="/discover"
-            className="inline-flex items-center gap-1.5 h-[32px] px-4 bg-[#5e6ad2] text-white font-[510] text-[13px] rounded-[4px] mt-8 hover:bg-[#6d78d5] transition-all duration-[0.16s]"
+            className="inline-flex items-center gap-2 h-11 px-6 bg-indigo-600 text-white font-semibold text-[14px] rounded-xl mt-8 hover:bg-indigo-700 transition-colors shadow-md shadow-indigo-200"
           >
-            Explore the Agent Store <ArrowRight className="w-3.5 h-3.5" />
+            Search 89 apps <Search className="w-4 h-4" />
           </Link>
         </div>
       </section>
 
-      {/* ─── Footer ──────────────────────────────────────────── */}
-      <footer className="border-t border-[rgba(255,255,255,0.05)]">
-        <div className="max-w-[1200px] mx-auto px-5 py-10">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            <div>
-              <p className="text-[12px] font-[510] text-[#62666d] mb-3">Browse</p>
-              <div className="space-y-2">
-                <Link href="/discover" className="block text-[13px] text-[#8a8f98] hover:text-[#f7f8f8] transition-colors duration-[0.1s]">Discover</Link>
-                <Link href="/discover" className="block text-[13px] text-[#8a8f98] hover:text-[#f7f8f8] transition-colors duration-[0.1s]">Categories</Link>
-                <Link href="/search" className="block text-[13px] text-[#8a8f98] hover:text-[#f7f8f8] transition-colors duration-[0.1s]">Search</Link>
-              </div>
-            </div>
-            <div>
-              <p className="text-[12px] font-[510] text-[#62666d] mb-3">For Developers</p>
-              <div className="space-y-2">
-                <Link href="/developers" className="block text-[13px] text-[#8a8f98] hover:text-[#f7f8f8] transition-colors duration-[0.1s]">List Your Agent</Link>
-                <Link href="/mcp" className="block text-[13px] text-[#8a8f98] hover:text-[#f7f8f8] transition-colors duration-[0.1s]">MCP Docs</Link>
-                <Link href="/submit" className="block text-[13px] text-[#8a8f98] hover:text-[#f7f8f8] transition-colors duration-[0.1s]">Submit Agent</Link>
-              </div>
-            </div>
-            <div>
-              <p className="text-[12px] font-[510] text-[#62666d] mb-3">API</p>
-              <div className="space-y-2">
-                <a href="/api/agents" target="_blank" className="block text-[13px] text-[#8a8f98] hover:text-[#f7f8f8] transition-colors duration-[0.1s]">REST API</a>
-                <a href="/api/mcp" target="_blank" className="block text-[13px] text-[#8a8f98] hover:text-[#f7f8f8] transition-colors duration-[0.1s]">MCP Endpoint</a>
-                <a href="/.well-known/mcp.json" target="_blank" className="block text-[13px] text-[#8a8f98] hover:text-[#f7f8f8] transition-colors duration-[0.1s]">MCP Discovery</a>
-              </div>
-            </div>
-            <div>
-              <p className="text-[12px] font-[510] text-[#62666d] mb-3">Resources</p>
-              <div className="space-y-2">
-                <a href="/llms.txt" target="_blank" className="block text-[13px] text-[#8a8f98] hover:text-[#f7f8f8] transition-colors duration-[0.1s]">llms.txt</a>
-                <a href="/sitemap.xml" target="_blank" className="block text-[13px] text-[#8a8f98] hover:text-[#f7f8f8] transition-colors duration-[0.1s]">Sitemap</a>
-              </div>
-            </div>
-          </div>
-          <div className="border-t border-[rgba(255,255,255,0.05)] mt-8 pt-5 flex items-center justify-between">
+      {/* Footer */}
+      <footer className="border-t border-black/[0.06] bg-white">
+        <div className="max-w-6xl mx-auto px-5 py-10">
+          <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <img
-                src="https://res.cloudinary.com/djklousbo/image/upload/v1775356040/logo_agentstore.png_fmokea.jpg"
-                alt="Agent Store"
-                className="h-4 w-4 rounded-[2px]"
-              />
-              <p className="text-[12px] text-[#62666d] font-[510]">Agent Store</p>
+              <div className="w-6 h-6 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                <Sparkles className="w-3 h-3 text-white" />
+              </div>
+              <span className="font-semibold text-[13px] text-gray-900">Consumer AI</span>
             </div>
-            <p className="text-[11px] text-[#62666d]">500+ agents · 18 categories · MCP 2025-11-25</p>
+            <p className="text-[12px] text-gray-500">89 apps · 11 categories · Updated May 2026</p>
           </div>
         </div>
       </footer>

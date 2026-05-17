@@ -8,7 +8,6 @@ export default function robots(): MetadataRoute.Robots {
         allow: "/",
       },
     ],
-    sitemap: "https://agentstore.ai/sitemap.xml",
-    host: "https://agentstore.ai",
+    sitemap: "https://consumerai.app/sitemap.xml",
   };
 }

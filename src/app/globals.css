@@ -1,42 +1,60 @@
 @import "tailwindcss";
 
 :root {
-  /* Brand */
-  --color-brand: #5e6ad2;
-  --color-brand-hover: #6d78d5;
-  --color-brand-muted: rgba(94, 106, 210, 0.15);
+  /* Brand — warm indigo with friendly energy */
+  --color-brand: #6366f1;
+  --color-brand-hover: #4f46e5;
+  --color-brand-light: #eef2ff;
+  --color-brand-muted: rgba(99, 102, 241, 0.08);
 
-  /* Backgrounds */
-  --color-bg-base: #08090a;
-  --color-bg-elevated: #0f1011;
-  --color-bg-surface: #101112;
-  --color-bg-overlay: #121314;
-  --color-bg-subtle: rgba(255, 255, 255, 0.02);
-  --color-bg-hover: rgba(255, 255, 255, 0.03);
-  --color-bg-active: rgba(255, 255, 255, 0.05);
+  /* Category accent colors */
+  --color-career: #8b5cf6;
+  --color-companion: #ec4899;
+  --color-style: #f59e0b;
+  --color-family: #10b981;
+  --color-health: #ef4444;
+  --color-home: #06b6d4;
+  --color-learning: #3b82f6;
+  --color-finance: #14b8a6;
+  --color-relationships: #f43f5e;
+  --color-shopping: #f97316;
+  --color-travel: #0ea5e9;
+
+  /* Backgrounds — warm light */
+  --color-bg-base: #fafafa;
+  --color-bg-elevated: #ffffff;
+  --color-bg-surface: #f5f5f7;
+  --color-bg-subtle: rgba(0, 0, 0, 0.02);
 
   /* Text */
-  --color-text-primary: #f7f8f8;
-  --color-text-secondary: #d0d6e0;
-  --color-text-tertiary: #8a8f98;
-  --color-text-muted: #62666d;
+  --color-text-primary: #111827;
+  --color-text-secondary: #374151;
+  --color-text-tertiary: #6b7280;
+  --color-text-muted: #9ca3af;
 
   /* Borders */
-  --color-border-subtle: rgba(255, 255, 255, 0.05);
-  --color-border-default: rgba(255, 255, 255, 0.08);
-  --color-border-emphasis: rgba(255, 255, 255, 0.1);
+  --color-border-subtle: rgba(0, 0, 0, 0.06);
+  --color-border-default: rgba(0, 0, 0, 0.1);
+  --color-border-emphasis: rgba(0, 0, 0, 0.15);
 
-  /* Radius */
-  --radius-sm: 4px;
-  --radius-md: 5px;
-  --radius-default: 6px;
-  --radius-lg: 8px;
+  /* Radius — friendly rounded corners */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
   --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08);
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.03);
+  --shadow-card-hover: 0 4px 16px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.06);
 
   /* Motion */
   --ease-default: cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  --duration-fast: 0.1s;
-  --duration-default: 0.16s;
+  --duration-fast: 0.12s;
+  --duration-default: 0.2s;
 }
 
 @theme inline {
@@ -47,7 +65,7 @@
 
 body {
   background: var(--color-bg-base);
-  color: var(--color-text-tertiary);
+  color: var(--color-text-secondary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -56,19 +74,31 @@ body {
   scroll-behavior: smooth;
 }
 
+/* Category color utilities */
+.cat-career { --cat-color: var(--color-career); }
+.cat-companion { --cat-color: var(--color-companion); }
+.cat-style { --cat-color: var(--color-style); }
+.cat-family { --cat-color: var(--color-family); }
+.cat-health { --cat-color: var(--color-health); }
+.cat-home { --cat-color: var(--color-home); }
+.cat-learning { --cat-color: var(--color-learning); }
+.cat-finance { --cat-color: var(--color-finance); }
+.cat-relationships { --cat-color: var(--color-relationships); }
+.cat-shopping { --cat-color: var(--color-shopping); }
+.cat-travel { --cat-color: var(--color-travel); }
+
 select {
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%238a8f98' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
   background-position: right 0.75rem center;
   background-repeat: no-repeat;
   background-size: 1.25em 1.25em;
 }
 
-@keyframes marquee-left {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes marquee-right {
-  0% { transform: translateX(-50%); }
-  100% { transform: translateX(0); }
+.animate-fade-in-up {
+  animation: fade-in-up 0.4s var(--ease-default) forwards;
 }
