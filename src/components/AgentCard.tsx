@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Agent } from "@/lib/types";
-import { Zap, Sparkles } from "lucide-react";
+import { Zap, Sparkles, ArrowUpRight } from "lucide-react";
 import { AgentIcon } from "./AgentIcon";
 
 const CATEGORY_COLORS: Record<string, string> = {
@@ -17,120 +17,125 @@ const CATEGORY_COLORS: Record<string, string> = {
   "travel-organiser": "#0ea5e9",
 };
 
-const CATEGORY_GRADIENTS: Record<string, string> = {
-  "career-job-search": "from-violet-500/20 via-purple-400/10 to-indigo-300/5",
-  "companion-life-coach": "from-pink-500/20 via-pink-400/10 to-rose-300/5",
-  "dressing-style": "from-amber-500/20 via-amber-400/10 to-yellow-300/5",
-  "family-parenting": "from-emerald-500/20 via-emerald-400/10 to-green-300/5",
-  "health-wellness-fitness": "from-rose-500/20 via-rose-400/10 to-pink-300/5",
-  "home-real-estate": "from-cyan-500/20 via-cyan-400/10 to-sky-300/5",
-  "learning-tutoring": "from-blue-500/20 via-blue-400/10 to-indigo-300/5",
-  "personal-finance": "from-teal-500/20 via-teal-400/10 to-emerald-300/5",
-  "relationship-dating": "from-rose-500/20 via-rose-400/10 to-pink-300/5",
-  "shopping-purchase-decisions": "from-orange-500/20 via-orange-400/10 to-amber-300/5",
-  "travel-organiser": "from-sky-500/20 via-sky-400/10 to-blue-300/5",
-};
-
 type Rarity = "common" | "uncommon" | "rare" | "legendary";
 
-function getRarity(depth: number): { rarity: Rarity; label: string; color: string; dotColor: string } {
-  if (depth >= 5) return { rarity: "legendary", label: "Legendary", color: "text-amber-700 bg-amber-50 border-amber-200", dotColor: "bg-amber-400" };
-  if (depth >= 4) return { rarity: "rare", label: "Rare", color: "text-purple-700 bg-purple-50 border-purple-200", dotColor: "bg-purple-400" };
-  if (depth >= 3) return { rarity: "uncommon", label: "Uncommon", color: "text-emerald-700 bg-emerald-50 border-emerald-200", dotColor: "bg-emerald-400" };
-  return { rarity: "common", label: "Common", color: "text-gray-600 bg-gray-50 border-gray-200", dotColor: "bg-gray-400" };
+function getRarity(depth: number): { rarity: Rarity; label: string; bgClass: string } {
+  if (depth >= 5) return { rarity: "legendary", label: "Legendary", bgClass: "bg-gradient-to-r from-amber-500 to-orange-500 text-white" };
+  if (depth >= 4) return { rarity: "rare", label: "Rare", bgClass: "bg-gradient-to-r from-purple-500 to-indigo-500 text-white" };
+  if (depth >= 3) return { rarity: "uncommon", label: "Uncommon", bgClass: "bg-gradient-to-r from-emerald-500 to-teal-500 text-white" };
+  return { rarity: "common", label: "Common", bgClass: "bg-gray-200 text-gray-600" };
 }
 
 function PricingPill({ pricing }: { pricing: string }) {
   const lower = pricing.toLowerCase();
   if (lower.includes("free") && !lower.includes("paid") && !lower.includes("premium") && !lower.includes("pro plan")) {
-    return <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-full">Free</span>;
+    return <span className="text-[11px] font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full tracking-wide uppercase">Free</span>;
   }
   if (lower.includes("free")) {
-    return <span className="text-[11px] font-medium text-gray-700 bg-gray-50 border border-gray-200 px-2.5 py-1 rounded-full">Freemium</span>;
+    return <span className="text-[11px] font-semibold text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full">Freemium</span>;
   }
   const match = pricing.match(/\$[\d.]+/);
   if (match) {
-    return <span className="text-[11px] font-medium text-gray-700 bg-gray-50 border border-gray-200 px-2.5 py-1 rounded-full">{match[0]}/mo</span>;
+    return <span className="text-[11px] font-semibold text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full">{match[0]}/mo</span>;
   }
-  return <span className="text-[11px] font-medium text-gray-600 bg-gray-50 border border-gray-200 px-2.5 py-1 rounded-full">Paid</span>;
-}
-
-function AutonomyDots({ depth }: { depth: number }) {
-  return (
-    <div className="flex gap-1 items-center">
-      {[1, 2, 3, 4, 5].map((i) => (
-        <div
-          key={i}
-          className={`w-1.5 h-1.5 rounded-full transition-colors ${
-            i <= depth ? "bg-current opacity-80" : "bg-gray-300"
-          }`}
-        />
-      ))}
-    </div>
-  );
+  return <span className="text-[11px] font-semibold text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full">Paid</span>;
 }
 
 export function AgentCard({ agent }: { agent: Agent }) {
   const catColor = CATEGORY_COLORS[agent.categorySlug] || "#6366f1";
-  const catGradient = CATEGORY_GRADIENTS[agent.categorySlug] || "from-indigo-500/20 via-indigo-400/10 to-purple-300/5";
-  const { rarity, dotColor } = getRarity(agent.agenticDepth);
+  const { rarity, label, bgClass } = getRarity(agent.agenticDepth);
   const isLegendary = rarity === "legendary";
 
   return (
     <Link href={`/agent/${agent.slug}`} className="group block h-full">
       <div
-        className={`relative h-full bg-white rounded-2xl border border-gray-100 overflow-hidden hover:shadow-[var(--shadow-card-hover)] hover:-translate-y-1 hover:scale-[1.02] transition-all duration-300 ease-out ${isLegendary ? "card-legendary" : ""}`}
+        className={`relative h-full rounded-[20px] overflow-hidden bg-white transition-all duration-500 ease-out hover:-translate-y-1.5 hover:shadow-[var(--shadow-card-hover)] ${isLegendary ? "card-legendary" : ""}`}
+        style={{ boxShadow: "var(--shadow-card)" }}
       >
-        {/* Category gradient top band */}
-        <div className={`h-20 bg-gradient-to-br ${catGradient} relative`}>
+        {/* Gradient header band */}
+        <div className="h-24 relative overflow-hidden">
           <div
             className="absolute inset-0"
             style={{
-              background: `radial-gradient(circle at 50% 80%, ${catColor}15, transparent 60%)`,
+              background: `linear-gradient(135deg, ${catColor}18 0%, ${catColor}08 50%, transparent 100%)`,
             }}
           />
-          {/* Rarity dot */}
+          <div
+            className="absolute inset-0"
+            style={{
+              background: `radial-gradient(circle at 80% 20%, ${catColor}12, transparent 50%)`,
+            }}
+          />
+          {/* Decorative shapes */}
+          <div
+            className="absolute -right-6 -top-6 w-24 h-24 rounded-full opacity-[0.07]"
+            style={{ background: catColor }}
+          />
+          <div
+            className="absolute -right-2 top-8 w-12 h-12 rounded-full opacity-[0.04]"
+            style={{ background: catColor }}
+          />
+
+          {/* Rarity badge */}
           <div className="absolute top-3 right-3">
-            <div className={`w-2.5 h-2.5 rounded-full ${dotColor} shadow-sm`} />
+            <span className={`text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full ${bgClass}`}>
+              {label}
+            </span>
           </div>
         </div>
 
-        {/* Icon centered overlapping */}
-        <div className="flex justify-center -mt-7 relative z-[2]">
-          <AgentIcon
-            name={agent.name}
-            websiteUrl={agent.url}
-            iconUrl=""
-            size="md"
-            className="rounded-2xl shadow-lg border-[3px] border-white"
-            glowColor={catColor}
-          />
+        {/* Icon — overlapping */}
+        <div className="flex justify-center -mt-8 relative z-[2]">
+          <div className="p-1 bg-white rounded-[18px] shadow-lg">
+            <AgentIcon
+              name={agent.name}
+              websiteUrl={agent.url}
+              iconUrl=""
+              size="md"
+              className="rounded-[14px]"
+              glowColor={catColor}
+            />
+          </div>
         </div>
 
         {/* Content */}
-        <div className="px-4 pb-4 pt-3 text-center">
-          <h3 className="font-bold text-[15px] text-gray-900 group-hover:text-indigo-600 transition-colors leading-tight truncate">
+        <div className="px-5 pb-5 pt-3 text-center">
+          <h3 className="font-bold text-[15px] text-gray-900 leading-snug truncate group-hover:text-indigo-600 transition-colors duration-300">
             {agent.name}
           </h3>
-          <p className="text-[13px] text-gray-500 mt-1.5 line-clamp-1 leading-snug">
+          <p className="text-[12.5px] text-gray-400 mt-1 line-clamp-2 leading-relaxed min-h-[2.5em]">
             {agent.jobToBeDone}
           </p>
 
-          {/* Pricing pill */}
-          <div className="mt-3">
+          {/* Pricing + end-to-end */}
+          <div className="flex items-center justify-center gap-2 mt-3">
             <PricingPill pricing={agent.pricing} />
-          </div>
-
-          {/* Bottom: autonomy dots + end-to-end badge */}
-          <div className="flex items-center justify-center gap-3 mt-3 pt-3 border-t border-gray-50">
-            <div className="flex items-center gap-1.5" style={{ color: catColor }}>
-              <AutonomyDots depth={agent.agenticDepth} />
-            </div>
             {agent.workflowCompletion === "High" && (
-              <span className="text-[10px] font-semibold text-amber-700 bg-amber-50 border border-amber-100 px-2 py-0.5 rounded-full">
-                End-to-end
+              <span className="text-[10px] font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-full uppercase tracking-wider">
+                E2E
               </span>
             )}
+          </div>
+
+          {/* Autonomy dots */}
+          <div className="flex items-center justify-center gap-1.5 mt-3 pt-3 border-t border-gray-100/80">
+            {[1, 2, 3, 4, 5].map((i) => (
+              <div
+                key={i}
+                className="w-2 h-2 rounded-full transition-all duration-300"
+                style={{
+                  backgroundColor: i <= agent.agenticDepth ? catColor : "#e5e7eb",
+                  boxShadow: i <= agent.agenticDepth ? `0 0 6px ${catColor}40` : "none",
+                }}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Hover arrow indicator */}
+        <div className="absolute top-3 left-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <div className="w-7 h-7 rounded-full bg-white/90 shadow-sm flex items-center justify-center backdrop-blur-sm">
+            <ArrowUpRight className="w-3.5 h-3.5 text-gray-600" />
           </div>
         </div>
       </div>
@@ -143,23 +148,14 @@ export function AgentCardCompact({ agent }: { agent: Agent }) {
 
   return (
     <Link href={`/agent/${agent.slug}`} className="group block">
-      <div className="flex items-center gap-3.5 bg-white rounded-xl border border-gray-100 px-4 py-3.5 hover:border-gray-200 hover:shadow-md hover:shadow-gray-100/60 transition-all duration-300">
-        <div className="relative">
-          <div
-            className="absolute -inset-0.5 rounded-xl opacity-40"
-            style={{ background: catColor }}
-          />
-          <AgentIcon name={agent.name} websiteUrl={agent.url} iconUrl="" size="sm" className="rounded-xl shadow-sm relative" />
-        </div>
+      <div className="flex items-center gap-3.5 bg-white rounded-2xl px-4 py-3.5 shadow-[var(--shadow-xs)] hover:shadow-[var(--shadow-md)] transition-all duration-300">
+        <AgentIcon name={agent.name} websiteUrl={agent.url} iconUrl="" size="sm" className="rounded-xl" />
         <div className="flex-1 min-w-0">
-          <h3 className="font-medium text-[14px] text-gray-900 truncate group-hover:text-indigo-600 transition-colors">{agent.name}</h3>
-          <p className="text-[12px] text-gray-500 truncate mt-0.5">{agent.jobToBeDone}</p>
+          <h3 className="font-semibold text-[14px] text-gray-900 truncate group-hover:text-indigo-600 transition-colors">{agent.name}</h3>
+          <p className="text-[12px] text-gray-400 truncate mt-0.5">{agent.jobToBeDone}</p>
         </div>
-        <div className="flex items-center gap-2">
-          <div
-            className="w-2 h-2 rounded-full flex-shrink-0"
-            style={{ backgroundColor: catColor }}
-          />
+        <div className="flex items-center gap-2 flex-shrink-0">
+          <div className="w-2 h-2 rounded-full" style={{ backgroundColor: catColor }} />
           <PricingPill pricing={agent.pricing} />
         </div>
       </div>
@@ -169,70 +165,93 @@ export function AgentCardCompact({ agent }: { agent: Agent }) {
 
 export function AgentCardFeatured({ agent }: { agent: Agent }) {
   const catColor = CATEGORY_COLORS[agent.categorySlug] || "#6366f1";
-  const catGradient = CATEGORY_GRADIENTS[agent.categorySlug] || "from-indigo-500/20 via-indigo-400/10 to-purple-300/5";
-  const { rarity, label, color } = getRarity(agent.agenticDepth);
-  const isLegendary = rarity === "legendary";
+  const { rarity, label, bgClass } = getRarity(agent.agenticDepth);
 
   return (
     <Link href={`/agent/${agent.slug}`} className="group block h-full">
       <div
-        className={`relative h-full bg-white rounded-[20px] border border-gray-100 overflow-hidden hover:shadow-[var(--shadow-card-hover)] hover:-translate-y-1.5 hover:scale-[1.02] transition-all duration-300 ease-out card-featured-hover ${isLegendary ? "card-legendary" : ""}`}
+        className="card-featured-hover relative h-full rounded-[24px] overflow-hidden bg-white transition-all duration-500 ease-out hover:-translate-y-2 hover:shadow-[var(--shadow-xl)]"
+        style={{ boxShadow: "var(--shadow-card)" }}
       >
-        {/* Large category gradient header */}
-        <div className={`h-28 bg-gradient-to-br ${catGradient} relative`}>
+        {/* Rich gradient header */}
+        <div className="h-32 relative overflow-hidden">
           <div
             className="absolute inset-0"
             style={{
-              background: `radial-gradient(ellipse at 50% 100%, ${catColor}20, transparent 60%), radial-gradient(circle at 80% 20%, ${catColor}10, transparent 40%)`,
+              background: `linear-gradient(135deg, ${catColor}20 0%, ${catColor}10 40%, ${catColor}05 100%)`,
             }}
           />
-          {/* Rarity badge */}
-          <div className="absolute top-3 right-3">
-            <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2.5 py-1 rounded-full border backdrop-blur-sm ${color}`}>
-              <Zap className="w-3 h-3" />{label}
+          <div
+            className="absolute inset-0 opacity-30"
+            style={{
+              background: `radial-gradient(circle at 20% 80%, ${catColor}20, transparent 50%), radial-gradient(circle at 80% 20%, ${catColor}15, transparent 50%)`,
+            }}
+          />
+          {/* Decorative circles */}
+          <div className="absolute -right-8 -top-8 w-32 h-32 rounded-full opacity-[0.06]" style={{ background: catColor }} />
+          <div className="absolute right-12 top-16 w-16 h-16 rounded-full opacity-[0.04]" style={{ background: catColor }} />
+          <div className="absolute left-8 -bottom-4 w-20 h-20 rounded-full opacity-[0.03]" style={{ background: catColor }} />
+
+          {/* Badges */}
+          <div className="absolute top-4 right-4 flex items-center gap-2">
+            <span className={`text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-full shadow-sm ${bgClass}`}>
+              {label}
             </span>
+          </div>
+          <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-white to-transparent" />
+        </div>
+
+        {/* Icon — large, overlapping */}
+        <div className="flex justify-center -mt-10 relative z-[2]">
+          <div className="p-1.5 bg-white rounded-[22px] shadow-xl">
+            <AgentIcon
+              name={agent.name}
+              websiteUrl={agent.url}
+              iconUrl=""
+              size="lg"
+              className="rounded-[17px]"
+              glowColor={catColor}
+            />
           </div>
         </div>
 
-        {/* Icon */}
-        <div className="flex justify-center -mt-9 relative z-[2]">
-          <AgentIcon
-            name={agent.name}
-            websiteUrl={agent.url}
-            iconUrl=""
-            size="lg"
-            className="rounded-2xl shadow-xl border-[4px] border-white"
-            glowColor={catColor}
-          />
-        </div>
-
-        <div className="px-5 pb-5 pt-3 text-center">
-          {/* Name */}
-          <h3 className="font-bold text-[18px] text-gray-900 group-hover:text-indigo-600 transition-colors leading-tight">
+        <div className="px-6 pb-6 pt-3">
+          <h3 className="font-bold text-[18px] text-gray-900 text-center group-hover:text-indigo-600 transition-colors duration-300 leading-tight">
             {agent.name}
           </h3>
-          <p className="text-[14px] text-gray-500 mt-2 leading-relaxed line-clamp-2">
+          <p className="text-[13px] text-gray-400 mt-2 text-center line-clamp-2 leading-relaxed">
             {agent.jobToBeDone}
           </p>
 
-          {/* Pricing + end-to-end */}
-          <div className="flex items-center justify-center gap-3 mt-4">
-            <PricingPill pricing={agent.pricing} />
-            {agent.workflowCompletion === "High" && (
-              <span className="text-[11px] font-semibold text-amber-700 bg-amber-50 border border-amber-100 px-2.5 py-1 rounded-full">
-                End-to-end
-              </span>
-            )}
+          {/* Stats row */}
+          <div className="grid grid-cols-3 gap-2 mt-5">
+            <div className="bg-gray-50 rounded-xl py-2 px-2 text-center">
+              <p className="text-[15px] font-bold text-gray-900">{agent.agenticDepth}/5</p>
+              <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wider">Auto</p>
+            </div>
+            <div className="bg-gray-50 rounded-xl py-2 px-2 text-center">
+              <p className="text-[12px] font-bold text-gray-900 truncate">{agent.workflowCompletion}</p>
+              <p className="text-[10px] text-gray-400 font-medium uppercase tracking-wider">Flow</p>
+            </div>
+            <div className="bg-gray-50 rounded-xl py-2 px-2 text-center">
+              <PricingPill pricing={agent.pricing} />
+            </div>
           </div>
 
-          {/* Why over ChatGPT hook */}
+          {/* Why over ChatGPT */}
           {agent.whyOverChatGPT && (
-            <div className="mt-4 bg-gradient-to-r from-indigo-50/80 to-purple-50/60 rounded-xl p-3.5 border border-indigo-100/50 text-left">
-              <div className="flex items-center gap-1.5 mb-1">
-                <Sparkles className="w-3 h-3 text-indigo-500" />
-                <span className="text-[10px] font-bold text-indigo-600 uppercase tracking-wider">Why this over ChatGPT</span>
+            <div
+              className="mt-4 rounded-xl p-3.5"
+              style={{
+                background: `linear-gradient(135deg, ${catColor}06, ${catColor}03)`,
+                border: `1px solid ${catColor}12`,
+              }}
+            >
+              <div className="flex items-center gap-1.5 mb-1.5">
+                <Sparkles className="w-3 h-3" style={{ color: catColor }} />
+                <span className="text-[10px] font-bold uppercase tracking-widest" style={{ color: catColor }}>Why this over ChatGPT</span>
               </div>
-              <p className="text-[12px] text-indigo-800/80 leading-[1.5] line-clamp-2">{agent.whyOverChatGPT}</p>
+              <p className="text-[12px] text-gray-500 leading-relaxed line-clamp-2">{agent.whyOverChatGPT}</p>
             </div>
           )}
         </div>

@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  /* Brand — warm indigo with friendly energy */
+  /* Brand */
   --color-brand: #6366f1;
   --color-brand-hover: #4f46e5;
   --color-brand-light: #eef2ff;
@@ -20,42 +20,47 @@
   --color-shopping: #f97316;
   --color-travel: #0ea5e9;
 
-  /* Backgrounds — warm light */
+  /* Backgrounds */
   --color-bg-base: #fafafa;
   --color-bg-elevated: #ffffff;
   --color-bg-surface: #f5f5f7;
-  --color-bg-subtle: rgba(0, 0, 0, 0.02);
+  --color-bg-subtle: rgba(0, 0, 0, 0.015);
 
-  /* Text */
-  --color-text-primary: #111827;
-  --color-text-secondary: #374151;
-  --color-text-tertiary: #6b7280;
-  --color-text-muted: #9ca3af;
+  /* Text — refined scale */
+  --color-text-primary: #0f172a;
+  --color-text-secondary: #334155;
+  --color-text-tertiary: #64748b;
+  --color-text-muted: #94a3b8;
 
   /* Borders */
-  --color-border-subtle: rgba(0, 0, 0, 0.06);
-  --color-border-default: rgba(0, 0, 0, 0.1);
-  --color-border-emphasis: rgba(0, 0, 0, 0.15);
+  --color-border-subtle: rgba(0, 0, 0, 0.04);
+  --color-border-default: rgba(0, 0, 0, 0.08);
+  --color-border-emphasis: rgba(0, 0, 0, 0.12);
 
-  /* Radius — friendly rounded corners */
+  /* Radius */
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
   --radius-xl: 20px;
+  --radius-2xl: 24px;
   --radius-full: 9999px;
 
-  /* Shadows */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.08);
-  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(0, 0, 0, 0.03);
-  --shadow-card-hover: 0 8px 30px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.06);
+  /* Refined shadows — layered for depth */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.03);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.02);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.03);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.06), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
+  --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+  --shadow-card: 0 0 0 1px rgba(0,0,0,0.03), 0 2px 4px rgba(0,0,0,0.02), 0 12px 24px rgba(0,0,0,0.03);
+  --shadow-card-hover: 0 0 0 1px rgba(0,0,0,0.04), 0 4px 8px rgba(0,0,0,0.04), 0 24px 48px rgba(0,0,0,0.08);
 
-  /* Motion */
+  /* Motion — Apple-like curves */
   --ease-default: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
   --duration-fast: 0.12s;
   --duration-default: 0.2s;
+  --duration-slow: 0.4s;
 }
 
 @theme inline {
@@ -64,11 +69,16 @@
   --font-sans: var(--font-inter);
 }
 
+html {
+  text-rendering: optimizeLegibility;
+}
+
 body {
   background: var(--color-bg-base);
   color: var(--color-text-secondary);
   font-size: 15px;
-  line-height: 1.6;
+  line-height: 1.65;
+  letter-spacing: -0.01em;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -77,18 +87,24 @@ body {
   scroll-behavior: smooth;
 }
 
-/* Category color utilities */
-.cat-career { --cat-color: var(--color-career); }
-.cat-companion { --cat-color: var(--color-companion); }
-.cat-style { --cat-color: var(--color-style); }
-.cat-family { --cat-color: var(--color-family); }
-.cat-health { --cat-color: var(--color-health); }
-.cat-home { --cat-color: var(--color-home); }
-.cat-learning { --cat-color: var(--color-learning); }
-.cat-finance { --cat-color: var(--color-finance); }
-.cat-relationships { --cat-color: var(--color-relationships); }
-.cat-shopping { --cat-color: var(--color-shopping); }
-.cat-travel { --cat-color: var(--color-travel); }
+/* ─── Refined typography ─── */
+h1, h2, h3, h4 {
+  letter-spacing: -0.025em;
+  color: var(--color-text-primary);
+}
+
+/* ─── Selection ─── */
+::selection {
+  background: rgba(99, 102, 241, 0.15);
+  color: #312e81;
+}
+
+/* ─── Focus ring ─── */
+:focus-visible {
+  outline: 2px solid var(--color-brand);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
 
 select {
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
@@ -97,14 +113,14 @@ select {
   background-size: 1.25em 1.25em;
 }
 
-/* Animations */
+/* ─── Animations ─── */
 @keyframes fade-in-up {
-  from { opacity: 0; transform: translateY(8px); }
+  from { opacity: 0; transform: translateY(12px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
 .animate-fade-in-up {
-  animation: fade-in-up 0.4s var(--ease-default) forwards;
+  animation: fade-in-up 0.5s var(--ease-smooth) forwards;
 }
 
 @keyframes fade-in {
@@ -113,19 +129,19 @@ select {
 }
 
 .animate-fade-in {
-  animation: fade-in 0.2s ease forwards;
+  animation: fade-in 0.25s ease forwards;
 }
 
 @keyframes slide-up {
-  from { opacity: 0; transform: translateY(16px) scale(0.98); }
+  from { opacity: 0; transform: translateY(20px) scale(0.97); }
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .animate-slide-up {
-  animation: slide-up 0.3s var(--ease-spring) forwards;
+  animation: slide-up 0.35s var(--ease-spring) forwards;
 }
 
-/* Legendary shimmer for depth-5 cards */
+/* ─── Legendary shimmer for depth-5 cards ─── */
 @keyframes shimmer {
   0% { background-position: -200% center; }
   100% { background-position: 200% center; }
@@ -144,17 +160,17 @@ select {
   z-index: 1;
   background: linear-gradient(
     105deg,
-    transparent 40%,
-    rgba(251, 191, 36, 0.08) 45%,
-    rgba(251, 191, 36, 0.15) 50%,
-    rgba(251, 191, 36, 0.08) 55%,
-    transparent 60%
+    transparent 38%,
+    rgba(251, 191, 36, 0.06) 43%,
+    rgba(251, 191, 36, 0.14) 50%,
+    rgba(251, 191, 36, 0.06) 57%,
+    transparent 62%
   );
   background-size: 200% 100%;
-  animation: shimmer 3s linear infinite;
+  animation: shimmer 4s ease-in-out infinite;
 }
 
-/* Holographic border for featured cards */
+/* ─── Holographic border for featured cards ─── */
 @keyframes holo-rotate {
   0% { --holo-angle: 0deg; }
   100% { --holo-angle: 360deg; }
@@ -178,35 +194,48 @@ select {
   padding: 2px;
   background: conic-gradient(
     from var(--holo-angle),
-    #ff6b6b,
-    #feca57,
-    #48dbfb,
-    #ff9ff3,
-    #54a0ff,
-    #5f27cd,
-    #ff6b6b
+    #818cf8,
+    #c084fc,
+    #f472b6,
+    #fb923c,
+    #38bdf8,
+    #818cf8
   );
   mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   mask-composite: exclude;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.4s ease;
   pointer-events: none;
   z-index: 0;
 }
 
 .card-featured-hover:hover::before {
-  opacity: 1;
-  animation: holo-rotate 3s linear infinite;
+  opacity: 0.8;
+  animation: holo-rotate 4s linear infinite;
 }
 
-/* Rarity border glow */
-.rarity-common { --rarity-color: #9ca3af; }
+/* ─── Rarity border glow ─── */
+.rarity-common { --rarity-color: #94a3b8; }
 .rarity-uncommon { --rarity-color: #10b981; }
 .rarity-rare { --rarity-color: #8b5cf6; }
 .rarity-legendary { --rarity-color: #f59e0b; }
 
-/* Search modal backdrop */
+/* ─── Search modal ─── */
 .search-backdrop {
-  backdrop-filter: blur(8px) saturate(150%);
-  background: rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(12px) saturate(180%);
+  background: rgba(15, 23, 42, 0.5);
+}
+
+/* ─── Noise texture overlay for hero ─── */
+.noise-overlay {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.015'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  pointer-events: none;
+}
+
+/* ─── Glass effect ─── */
+.glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.5);
 }
