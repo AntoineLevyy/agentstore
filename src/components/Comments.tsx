@@ -7,7 +7,8 @@ import { Star, MessageCircle, Send } from "lucide-react";
 interface Comment {
   id: string;
   agent_slug: string;
-  author_name: string;
+  user_name: string;
+  title: string;
   body: string;
   rating: number;
   created_at: string;
@@ -49,7 +50,7 @@ export function Comments({ agentSlug }: { agentSlug: string }) {
   const [showForm, setShowForm] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState(false);
-  const [form, setForm] = useState({ author_name: "", body: "", rating: 0 });
+  const [form, setForm] = useState({ user_name: "", title: "", body: "", rating: 0 });
 
   useEffect(() => {
     loadComments();
@@ -57,7 +58,7 @@ export function Comments({ agentSlug }: { agentSlug: string }) {
 
   async function loadComments() {
     const { data } = await supabase
-      .from("comments")
+      .from("reviews")
       .select("*")
       .eq("agent_slug", agentSlug)
       .order("created_at", { ascending: false });
@@ -67,19 +68,20 @@ export function Comments({ agentSlug }: { agentSlug: string }) {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!form.author_name.trim() || !form.body.trim() || form.rating === 0) return;
+    if (!form.user_name.trim() || !form.body.trim() || form.rating === 0) return;
 
     setSubmitting(true);
-    const { error } = await supabase.from("comments").insert({
+    const { error } = await supabase.from("reviews").insert({
       agent_slug: agentSlug,
-      author_name: form.author_name.trim(),
+      user_name: form.user_name.trim(),
+      title: form.title.trim() || "Review",
       body: form.body.trim(),
       rating: form.rating,
     });
 
     if (!error) {
       setSuccess(true);
-      setForm({ author_name: "", body: "", rating: 0 });
+      setForm({ user_name: "", title: "", body: "", rating: 0 });
       setShowForm(false);
       loadComments();
       setTimeout(() => setSuccess(false), 3000);
@@ -130,9 +132,19 @@ export function Comments({ agentSlug }: { agentSlug: string }) {
               <label className="text-[12px] font-medium text-gray-600 block mb-1.5">Your name</label>
               <input
                 type="text"
-                value={form.author_name}
-                onChange={(e) => setForm({ ...form, author_name: e.target.value })}
+                value={form.user_name}
+                onChange={(e) => setForm({ ...form, user_name: e.target.value })}
                 placeholder="Jane"
+                className="w-full h-10 px-3.5 bg-gray-50 rounded-lg text-[14px] text-gray-900 placeholder:text-gray-400 border border-black/[0.06] outline-none focus:ring-2 focus:ring-indigo-200"
+              />
+            </div>
+            <div>
+              <label className="text-[12px] font-medium text-gray-600 block mb-1.5">Title</label>
+              <input
+                type="text"
+                value={form.title}
+                onChange={(e) => setForm({ ...form, title: e.target.value })}
+                placeholder="e.g. Game changer for my job search"
                 className="w-full h-10 px-3.5 bg-gray-50 rounded-lg text-[14px] text-gray-900 placeholder:text-gray-400 border border-black/[0.06] outline-none focus:ring-2 focus:ring-indigo-200"
               />
             </div>
@@ -149,7 +161,7 @@ export function Comments({ agentSlug }: { agentSlug: string }) {
             <div className="flex items-center gap-2">
               <button
                 type="submit"
-                disabled={submitting || !form.author_name.trim() || !form.body.trim() || form.rating === 0}
+                disabled={submitting || !form.user_name.trim() || !form.body.trim() || form.rating === 0}
                 className="inline-flex items-center gap-1.5 h-9 px-4 bg-indigo-600 text-white font-medium text-[13px] rounded-lg hover:bg-indigo-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Send className="w-3.5 h-3.5" />
@@ -182,13 +194,14 @@ export function Comments({ agentSlug }: { agentSlug: string }) {
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-2.5">
                   <div className="w-7 h-7 rounded-full bg-gradient-to-br from-indigo-100 to-purple-100 flex items-center justify-center">
-                    <span className="text-[11px] font-bold text-indigo-700">{comment.author_name[0]?.toUpperCase()}</span>
+                    <span className="text-[11px] font-bold text-indigo-700">{comment.user_name[0]?.toUpperCase()}</span>
                   </div>
-                  <span className="text-[13px] font-medium text-gray-900">{comment.author_name}</span>
+                  <span className="text-[13px] font-medium text-gray-900">{comment.user_name}</span>
                   <span className="text-[11px] text-gray-400">{timeAgo(comment.created_at)}</span>
                 </div>
                 <StarRating rating={comment.rating} />
               </div>
+              {comment.title && <p className="text-[13px] font-medium text-gray-900 pl-[38px] mb-0.5">{comment.title}</p>}
               <p className="text-[13px] text-gray-700 leading-relaxed pl-[38px]">{comment.body}</p>
             </div>
           ))}

@@ -1,27 +1,7 @@
 -- Run this in your Supabase SQL Editor (Dashboard > SQL Editor)
+-- The 'reviews' table already exists, only 'submissions' needs to be created.
 
--- Comments table
-CREATE TABLE IF NOT EXISTS comments (
-  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-  agent_slug TEXT NOT NULL,
-  author_name TEXT NOT NULL,
-  body TEXT NOT NULL,
-  rating INTEGER CHECK (rating >= 1 AND rating <= 5),
-  created_at TIMESTAMPTZ DEFAULT now()
-);
-
--- Enable RLS
-ALTER TABLE comments ENABLE ROW LEVEL SECURITY;
-
--- Allow anyone to read comments
-CREATE POLICY "Anyone can read comments" ON comments
-  FOR SELECT USING (true);
-
--- Allow anyone to insert comments (public form)
-CREATE POLICY "Anyone can insert comments" ON comments
-  FOR INSERT WITH CHECK (true);
-
--- Submissions table
+-- Submissions table (for public app suggestions)
 CREATE TABLE IF NOT EXISTS submissions (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   app_name TEXT NOT NULL,
@@ -42,6 +22,6 @@ ALTER TABLE submissions ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Anyone can submit" ON submissions
   FOR INSERT WITH CHECK (true);
 
--- Only authenticated users (you) can read submissions
-CREATE POLICY "Only admin can read submissions" ON submissions
+-- Allow reading submissions (for admin review)
+CREATE POLICY "Anyone can read submissions" ON submissions
   FOR SELECT USING (true);
