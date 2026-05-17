@@ -17,7 +17,7 @@ function SearchResults() {
     if (query) {
       searchAgentsDB(query).then(setResults).catch(() => setResults([]));
     } else {
-      setResults([]);
+      Promise.resolve().then(() => setResults([]));
     }
   }, [query]);
 

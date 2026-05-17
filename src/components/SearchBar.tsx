@@ -16,6 +16,14 @@ export function SearchBar({ autoFocus = false }: { autoFocus?: boolean }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const timeoutRef = useRef<NodeJS.Timeout>(undefined);
 
+  function handleQueryChange(value: string) {
+    setQuery(value);
+    if (value.length < 2) {
+      setResults([]);
+      setIsOpen(false);
+    }
+  }
+
   useEffect(() => {
     if (autoFocus && inputRef.current) {
       inputRef.current.focus();
@@ -25,11 +33,7 @@ export function SearchBar({ autoFocus = false }: { autoFocus?: boolean }) {
   useEffect(() => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
 
-    if (query.length < 2) {
-      setResults([]);
-      setIsOpen(false);
-      return;
-    }
+    if (query.length < 2) return;
 
     timeoutRef.current = setTimeout(() => {
       const found = searchAgents(query);
@@ -59,7 +63,7 @@ export function SearchBar({ autoFocus = false }: { autoFocus?: boolean }) {
             ref={inputRef}
             type="text"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => handleQueryChange(e.target.value)}
             onFocus={() => results.length > 0 && setIsOpen(true)}
             placeholder="Search agents, tools, capabilities..."
             className="w-full h-12 pl-12 pr-12 bg-[#0f1011] rounded-2xl text-[15px] text-white placeholder:text-[#8a8f98] outline-none focus:ring-2 focus:ring-[#5e6ad2]/30 transition-shadow"

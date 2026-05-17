@@ -4,11 +4,17 @@ import { AgentIcon } from "@/components/AgentIcon";
 import { ArrowRight, Search, Layers, Zap, Globe } from "lucide-react";
 import { CategoryIcon } from "@/components/CategoryIcon";
 
+function stableAgentScore(value: string) {
+  return Array.from(value).reduce((score, char) => score + char.charCodeAt(0), 0);
+}
 
 export default function Home() {
   const approved = agents.filter((a) => a.status === "approved");
   // Two rows for the rolling marquee — pick 40 agents, split into 2 rows of 20
-  const marqueeAgents = approved.filter((a) => a.website_url).sort(() => 0.5 - Math.random()).slice(0, 40);
+  const marqueeAgents = approved
+    .filter((a) => a.website_url)
+    .sort((a, b) => stableAgentScore(a.slug) - stableAgentScore(b.slug))
+    .slice(0, 40);
   const row1 = marqueeAgents.slice(0, 20);
   const row2 = marqueeAgents.slice(20, 40);
   const b2bStats = b2bCategories.map((c) => ({
@@ -229,7 +235,7 @@ export default function Home() {
               <div className="w-2.5 h-2.5 rounded-full bg-[#10b981]/60" />
               <span className="text-[11px] text-[#62666d] ml-1.5 font-sans font-[510]">MCP JSON-RPC</span>
             </div>
-            <p className="text-[#62666d]">// &ldquo;What can help with this task?&rdquo;</p>
+            <p className="text-[#62666d]">{"// “What can help with this task?”"}</p>
             <p className="text-[#d0d6e0] mt-1">{"{"}</p>
             <p className="text-[#d0d6e0] ml-4"><span className="text-[#5e6ad2]">&quot;method&quot;</span>: <span className="text-[#10b981]">&quot;tools/call&quot;</span>,</p>
             <p className="text-[#d0d6e0] ml-4"><span className="text-[#5e6ad2]">&quot;params&quot;</span>: {"{"}</p>
@@ -240,7 +246,7 @@ export default function Home() {
             <p className="text-[#d0d6e0] ml-4">{"}"}</p>
             <p className="text-[#d0d6e0]">{"}"}</p>
             <div className="border-t border-[rgba(255,255,255,0.05)] my-3" />
-            <p className="text-[#62666d]">// Ranked from 500+ agents</p>
+            <p className="text-[#62666d]">{"// Ranked from 500+ agents"}</p>
             <p className="text-[#d0d6e0] mt-1">→ Julius AI <span className="text-[#62666d] ml-1">92%</span></p>
             <p className="text-[#d0d6e0]">→ Amplitude <span className="text-[#62666d] ml-1">78%</span></p>
             <p className="text-[#d0d6e0]">→ Mixpanel Spark <span className="text-[#62666d] ml-1">71%</span></p>
