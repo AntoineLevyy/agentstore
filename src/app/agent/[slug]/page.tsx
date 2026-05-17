@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const agent = agents.find((a) => a.slug === slug);
   if (!agent) return {};
   return {
-    title: `${agent.name} — ${agent.jobToBeDone} | Every AI App`,
+    title: `${agent.name} — ${agent.jobToBeDone} | Agentstore`,
     description: agent.jobToBeDone,
   };
 }

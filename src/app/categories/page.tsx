@@ -3,7 +3,7 @@ import { categories, agents } from "@/lib/data";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "AI App Categories — Every AI App",
+  title: "AI App Categories — Agentstore",
   description: "Browse 11 categories of AI apps for real life: career, health, finance, relationships, travel, shopping & more.",
 };
 

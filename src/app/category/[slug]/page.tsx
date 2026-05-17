@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const category = getCategory(slug);
   if (!category) return {};
   return {
-    title: `Best AI Apps for ${category.name} — Every AI App`,
+    title: `Best AI Apps for ${category.name} — Agentstore`,
     description: category.jobContext,
   };
 }

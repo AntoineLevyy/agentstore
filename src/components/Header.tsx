@@ -27,7 +27,7 @@ export function Header() {
                 </linearGradient>
               </defs>
             </svg>
-            <span className="font-semibold text-[15px] text-gray-900 tracking-[-0.01em]">Every AI App</span>
+            <span className="font-semibold text-[15px] text-gray-900 tracking-[-0.01em]">Agentstore</span>
           </Link>
 
           <nav className="hidden md:flex items-center gap-1">

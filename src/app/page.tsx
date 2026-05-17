@@ -196,7 +196,7 @@ export default function Home() {
                 <path d="M8 14h12M14 8v12M10 10l8 8M18 10l-8 8" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.9" />
                 <defs><linearGradient id="footer-grad" x1="0" y1="0" x2="28" y2="28"><stop stopColor="#6366f1" /><stop offset="1" stopColor="#a855f7" /></linearGradient></defs>
               </svg>
-              <span className="font-semibold text-[13px] text-gray-900">Every AI App</span>
+              <span className="font-semibold text-[13px] text-gray-900">Agentstore</span>
             </div>
             <p className="text-[12px] text-gray-500">89+ apps · 11 categories · Updated May 2026</p>
           </div>

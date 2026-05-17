@@ -9,22 +9,22 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Every AI App — The Complete Directory of Consumer AI Apps",
+  title: "Agentstore — The Complete Directory of Consumer AI Apps",
   description:
     "Every AI app for real life in one place. Career, health, finance, relationships, travel, shopping & more. Reviews, pricing, and what each app actually does for you.",
   icons: {
     icon: "/favicon.png",
   },
   openGraph: {
-    title: "Every AI App — The Complete Directory of Consumer AI Apps",
+    title: "Agentstore — The Complete Directory of Consumer AI Apps",
     description:
       "Every AI app for real life in one place. Career, health, finance, relationships, travel, shopping & more.",
     type: "website",
-    siteName: "Every AI App",
+    siteName: "Agentstore",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Every AI App — The Complete Directory of Consumer AI Apps",
+    title: "Agentstore — The Complete Directory of Consumer AI Apps",
     description:
       "Every AI app for real life in one place. Career, health, finance, relationships, travel, shopping & more.",
   },
