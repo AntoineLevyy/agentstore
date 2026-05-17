@@ -9,7 +9,7 @@ import { Check, ChevronLeft, ChevronRight, Upload, Plus, X } from "lucide-react"
 const steps = [
   { number: 1, title: "Basic Info" },
   { number: 2, title: "Media" },
-  { number: 3, title: "How it works" },
+  { number: 3, title: "Technical" },
   { number: 4, title: "Pricing" },
   { number: 5, title: "Review" },
 ];
@@ -23,8 +23,8 @@ export default function SubmitPage() {
     category_id: "",
     icon: null as File | null,
     screenshots: [] as File[],
-    outcomes: [""],
-    integrations: [""],
+    capabilities: [""],
+    tools: [""],
     special_data: "",
     website_url: "",
     creator_name: "",
@@ -40,38 +40,38 @@ export default function SubmitPage() {
   }
 
   function addCapability() {
-    updateForm({ outcomes: [...form.outcomes, ""] });
+    updateForm({ capabilities: [...form.capabilities, ""] });
   }
 
   function removeCapability(i: number) {
-    updateForm({ outcomes: form.outcomes.filter((_, idx) => idx !== i) });
+    updateForm({ capabilities: form.capabilities.filter((_, idx) => idx !== i) });
   }
 
   function updateCapability(i: number, value: string) {
-    const caps = [...form.outcomes];
+    const caps = [...form.capabilities];
     caps[i] = value;
-    updateForm({ outcomes: caps });
+    updateForm({ capabilities: caps });
   }
 
   function addTool() {
-    updateForm({ integrations: [...form.integrations, ""] });
+    updateForm({ tools: [...form.tools, ""] });
   }
 
   function removeTool(i: number) {
-    updateForm({ integrations: form.integrations.filter((_, idx) => idx !== i) });
+    updateForm({ tools: form.tools.filter((_, idx) => idx !== i) });
   }
 
   function updateTool(i: number, value: string) {
-    const t = [...form.integrations];
+    const t = [...form.tools];
     t[i] = value;
-    updateForm({ integrations: t });
+    updateForm({ tools: t });
   }
 
   function canProceed() {
     switch (step) {
       case 1: return form.name && form.tagline && form.description && form.category_id;
       case 2: return true; // Media is optional
-      case 3: return form.outcomes.some((c) => c.trim()) && form.website_url;
+      case 3: return form.capabilities.some((c) => c.trim()) && form.website_url;
       case 4: return true;
       case 5: return true;
       default: return false;
@@ -93,8 +93,8 @@ export default function SubmitPage() {
         tagline: form.tagline,
         description: form.description,
         category_id: form.category_id,
-        capabilities: form.outcomes.filter((c) => c.trim()),
-        tools: form.integrations.filter((t) => t.trim()),
+        capabilities: form.capabilities.filter((c) => c.trim()),
+        tools: form.tools.filter((t) => t.trim()),
         special_data: form.special_data,
         website_url: form.website_url,
         creator_name: form.creator_name,
@@ -118,9 +118,9 @@ export default function SubmitPage() {
         <div className="w-16 h-16 rounded-full bg-[rgba(16,185,129,0.15)] flex items-center justify-center mx-auto mb-6">
           <Check className="w-8 h-8 text-[#10b981]" />
         </div>
-        <h1 className="text-2xl font-bold text-white">App Submitted!</h1>
+        <h1 className="text-2xl font-bold text-white">Agent Submitted!</h1>
         <p className="text-[#8a8f98] mt-3 text-[15px]">
-          Your app <strong>{form.name}</strong> has been submitted for review.
+          Your agent <strong>{form.name}</strong> has been submitted for review.
           We&apos;ll review it and get back to you within 24-48 hours.
         </p>
         <Link href="/" className="inline-block mt-6 bg-[#5e6ad2] text-white font-semibold px-6 py-3 rounded-full hover:bg-[#6d78d5] transition-colors text-sm">
@@ -132,8 +132,8 @@ export default function SubmitPage() {
 
   return (
     <div className="max-w-[700px] mx-auto px-5 py-8">
-      <h1 className="text-3xl font-bold text-white mb-2">Submit an App</h1>
-      <p className="text-[#8a8f98] mb-8">List your AI app. We care most about what job it helps a consumer complete.</p>
+      <h1 className="text-3xl font-bold text-white mb-2">Submit an Agent</h1>
+      <p className="text-[#8a8f98] mb-8">List your AI agent on the Agent Store. It takes under 5 minutes.</p>
 
       {/* Progress */}
       <div className="flex items-center gap-1 mb-10">
@@ -158,12 +158,12 @@ export default function SubmitPage() {
       {step === 1 && (
         <div className="space-y-5">
           <div>
-            <label className="block text-sm font-medium text-white mb-1.5">App Name *</label>
+            <label className="block text-sm font-medium text-white mb-1.5">Agent Name *</label>
             <input
               type="text"
               value={form.name}
               onChange={(e) => updateForm({ name: e.target.value })}
-              placeholder="e.g. My AI App"
+              placeholder="e.g. My AI Assistant"
               className="w-full h-12 px-4 bg-[#0f1011] rounded-xl text-[15px] text-white placeholder:text-[#8a8f98] outline-none focus:ring-2 focus:ring-[#5e6ad2]/30"
             />
           </div>
@@ -173,7 +173,7 @@ export default function SubmitPage() {
               type="text"
               value={form.tagline}
               onChange={(e) => updateForm({ tagline: e.target.value })}
-              placeholder="What does the app help someone do?"
+              placeholder="A short description of what your agent does"
               maxLength={80}
               className="w-full h-12 px-4 bg-[#0f1011] rounded-xl text-[15px] text-white placeholder:text-[#8a8f98] outline-none focus:ring-2 focus:ring-[#5e6ad2]/30"
             />
@@ -184,7 +184,7 @@ export default function SubmitPage() {
             <textarea
               value={form.description}
               onChange={(e) => updateForm({ description: e.target.value })}
-              placeholder="Describe the user job, the output, and why someone should try it..."
+              placeholder="Describe what your agent does, how it works, and why users should try it..."
               rows={5}
               className="w-full px-4 py-3 bg-[#0f1011] rounded-xl text-[15px] text-white placeholder:text-[#8a8f98] outline-none focus:ring-2 focus:ring-[#5e6ad2]/30 resize-none"
             />
@@ -209,7 +209,7 @@ export default function SubmitPage() {
       {step === 2 && (
         <div className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-white mb-1.5">App Icon</label>
+            <label className="block text-sm font-medium text-white mb-1.5">Agent Icon</label>
             <p className="text-xs text-[#8a8f98] mb-3">128x128px recommended. PNG or JPG.</p>
             <label className="flex items-center justify-center w-32 h-32 rounded-[22.5%] bg-[#0f1011] border-2 border-dashed border-[#62666d] cursor-pointer hover:bg-[#101112] transition-colors">
               <input type="file" accept="image/*" className="hidden" onChange={(e) => updateForm({ icon: e.target.files?.[0] || null })} />
@@ -222,7 +222,7 @@ export default function SubmitPage() {
           </div>
           <div>
             <label className="block text-sm font-medium text-white mb-1.5">Screenshots</label>
-            <p className="text-xs text-[#8a8f98] mb-3">Upload up to 5 screenshots showing your app in action.</p>
+            <p className="text-xs text-[#8a8f98] mb-3">Upload up to 5 screenshots showing your agent in action.</p>
             <label className="flex items-center justify-center w-full h-32 rounded-2xl bg-[#0f1011] border-2 border-dashed border-[#62666d] cursor-pointer hover:bg-[#101112] transition-colors">
               <input type="file" accept="image/*" multiple className="hidden" onChange={(e) => updateForm({ screenshots: Array.from(e.target.files || []) })} />
               <div className="text-center">
@@ -236,14 +236,14 @@ export default function SubmitPage() {
         </div>
       )}
 
-      {/* Step 3: How it works */}
+      {/* Step 3: Technical */}
       {step === 3 && (
         <div className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-white mb-1.5">Outcomes *</label>
-            <p className="text-xs text-[#8a8f98] mb-3">What can your app do? Add each capability separately.</p>
+            <label className="block text-sm font-medium text-white mb-1.5">Capabilities *</label>
+            <p className="text-xs text-[#8a8f98] mb-3">What can your agent do? Add each capability separately.</p>
             <div className="space-y-2">
-              {form.outcomes.map((cap, i) => (
+              {form.capabilities.map((cap, i) => (
                 <div key={i} className="flex items-center gap-2">
                   <input
                     type="text"
@@ -252,7 +252,7 @@ export default function SubmitPage() {
                     placeholder="e.g. Code generation"
                     className="flex-1 h-10 px-4 bg-[#0f1011] rounded-xl text-[14px] text-white placeholder:text-[#8a8f98] outline-none focus:ring-2 focus:ring-[#5e6ad2]/30"
                   />
-                  {form.outcomes.length > 1 && (
+                  {form.capabilities.length > 1 && (
                     <button onClick={() => removeCapability(i)} className="w-8 h-8 rounded-full bg-[rgba(235,87,87,0.15)] flex items-center justify-center hover:bg-[rgba(235,87,87,0.25)] transition-colors">
                       <X className="w-4 h-4 text-[#eb5757]" />
                     </button>
@@ -266,10 +266,10 @@ export default function SubmitPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-white mb-1.5">Integrations</label>
-            <p className="text-xs text-[#8a8f98] mb-3">What integrations or integrations does your app use?</p>
+            <label className="block text-sm font-medium text-white mb-1.5">Tools</label>
+            <p className="text-xs text-[#8a8f98] mb-3">What tools or integrations does your agent use?</p>
             <div className="space-y-2">
-              {form.integrations.map((tool, i) => (
+              {form.tools.map((tool, i) => (
                 <div key={i} className="flex items-center gap-2">
                   <input
                     type="text"
@@ -278,7 +278,7 @@ export default function SubmitPage() {
                     placeholder="e.g. Web browser"
                     className="flex-1 h-10 px-4 bg-[#0f1011] rounded-xl text-[14px] text-white placeholder:text-[#8a8f98] outline-none focus:ring-2 focus:ring-[#5e6ad2]/30"
                   />
-                  {form.integrations.length > 1 && (
+                  {form.tools.length > 1 && (
                     <button onClick={() => removeTool(i)} className="w-8 h-8 rounded-full bg-[rgba(235,87,87,0.15)] flex items-center justify-center hover:bg-[rgba(235,87,87,0.25)] transition-colors">
                       <X className="w-4 h-4 text-[#eb5757]" />
                     </button>
@@ -296,7 +296,7 @@ export default function SubmitPage() {
             <textarea
               value={form.special_data}
               onChange={(e) => updateForm({ special_data: e.target.value })}
-              placeholder="Does your app have access to unique data, knowledge bases, or training?"
+              placeholder="Does your agent have access to unique data, knowledge bases, or training?"
               rows={3}
               className="w-full px-4 py-3 bg-[#0f1011] rounded-xl text-[15px] text-white placeholder:text-[#8a8f98] outline-none focus:ring-2 focus:ring-[#5e6ad2]/30 resize-none"
             />
@@ -308,7 +308,7 @@ export default function SubmitPage() {
               type="url"
               value={form.website_url}
               onChange={(e) => updateForm({ website_url: e.target.value })}
-              placeholder="https://yourapp.com"
+              placeholder="https://youragent.com"
               className="w-full h-12 px-4 bg-[#0f1011] rounded-xl text-[15px] text-white placeholder:text-[#8a8f98] outline-none focus:ring-2 focus:ring-[#5e6ad2]/30"
             />
           </div>
@@ -411,17 +411,17 @@ export default function SubmitPage() {
                 <p className="text-sm text-white line-clamp-3">{form.description}</p>
               </div>
               <div>
-                <p className="text-xs text-[#8a8f98] font-medium">Outcomes</p>
+                <p className="text-xs text-[#8a8f98] font-medium">Capabilities</p>
                 <div className="flex flex-wrap gap-1.5 mt-1">
-                  {form.outcomes.filter((c) => c.trim()).map((cap, i) => (
+                  {form.capabilities.filter((c) => c.trim()).map((cap, i) => (
                     <span key={i} className="px-2.5 py-1 bg-[rgba(255,255,255,0.08)] rounded-full text-xs text-[#d0d6e0]">{cap}</span>
                   ))}
                 </div>
               </div>
               <div>
-                <p className="text-xs text-[#8a8f98] font-medium">Integrations</p>
+                <p className="text-xs text-[#8a8f98] font-medium">Tools</p>
                 <div className="flex flex-wrap gap-1.5 mt-1">
-                  {form.integrations.filter((t) => t.trim()).map((tool, i) => (
+                  {form.tools.filter((t) => t.trim()).map((tool, i) => (
                     <span key={i} className="px-2.5 py-1 bg-[#5e6ad2]/15 rounded-full text-xs text-[#5e6ad2]">{tool}</span>
                   ))}
                 </div>
@@ -453,7 +453,7 @@ export default function SubmitPage() {
             </div>
           </div>
           <p className="text-xs text-[#8a8f98] text-center">
-            By submitting, your app will be reviewed by our team. Approved apps typically appear within 24-48 hours.
+            By submitting, your agent will be reviewed by our team. Approved agents typically appear within 24-48 hours.
           </p>
         </div>
       )}
@@ -487,7 +487,7 @@ export default function SubmitPage() {
               disabled={submitting}
               className="flex items-center gap-1.5 bg-[#5e6ad2] text-white font-semibold px-8 py-3 rounded-full hover:bg-[#6d78d5] transition-colors text-sm disabled:opacity-40"
             >
-              <Check className="w-4 h-4" /> {submitting ? "Submitting..." : "Submit App"}
+              <Check className="w-4 h-4" /> {submitting ? "Submitting..." : "Submit Agent"}
             </button>
           </div>
         )}

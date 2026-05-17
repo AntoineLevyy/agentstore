@@ -1,85 +1,105 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Search, SlidersHorizontal, Sparkles, X } from "lucide-react";
-import { agents as staticAgents, categories, b2cCategories, b2bCategories, getCategoryById } from "@/lib/data";
+import { Search, SlidersHorizontal, Sparkles } from "lucide-react";
+import { agents as staticAgents, categories, b2bCategories, b2cCategories, getCategoryById } from "@/lib/data";
 import { getAllApprovedAgents } from "@/lib/db";
 import { Agent } from "@/lib/types";
-import { AgentCard, getPriceLabel } from "@/components/AgentCard";
+import { AgentCard, AgentCardGrid } from "@/components/AgentCard";
+import { CategoryIcon } from "@/components/CategoryIcon";
 import { AgentIcon } from "@/components/AgentIcon";
 
 interface Filters {
   category?: string;
   pricing?: string;
+  tool?: string;
 }
 
-const examples = [
-  "I want an app to edit family photos",
-  "I need help planning a cheap weekend trip",
-  "I want to learn Spanish for 10 minutes a day",
-  "I need an app to write follow-up emails",
-  "I want help understanding a legal document",
-  "I need a better grocery and meal plan",
-];
-
-function scoreAgent(agent: Agent, query: string, filters: Filters) {
-  if (filters.category && agent.category_id !== filters.category) return 0;
-  if (filters.pricing && agent.pricing_type !== filters.pricing) return 0;
-  if (!query.trim()) return 1;
-
+function scoreAgent(agent: Agent, query: string, filters: Filters): number {
   const q = query.toLowerCase();
   const words = q.split(/\s+/).filter((w) => w.length > 2);
-  const searchable = [agent.name, agent.tagline, agent.description, ...agent.capabilities, ...agent.tools, agent.special_data]
-    .join(" ")
-    .toLowerCase();
   let score = 0;
+
+  const searchable = [
+    agent.name.toLowerCase(),
+    agent.tagline.toLowerCase(),
+    agent.description.toLowerCase(),
+    ...agent.capabilities.map((c) => c.toLowerCase()),
+    ...agent.tools.map((t) => t.toLowerCase()),
+    agent.special_data.toLowerCase(),
+  ].join(" ");
+
   for (const word of words) {
-    if (agent.name.toLowerCase().includes(word)) score += 16;
+    if (agent.name.toLowerCase().includes(word)) score += 15;
     else if (agent.tagline.toLowerCase().includes(word)) score += 10;
     else if (searchable.includes(word)) score += 5;
   }
-  if (searchable.includes(q)) score += 24;
+
+  if (searchable.includes(q)) score += 20;
+  if (filters.category && agent.category_id !== filters.category) return 0;
+  if (filters.pricing && agent.pricing_type !== filters.pricing) return 0;
+  if (filters.tool) {
+    const toolMatch = agent.tools.some((t) => t.toLowerCase().includes(filters.tool!.toLowerCase()));
+    if (!toolMatch) return 0;
+  }
+
   return score;
 }
 
-function ResultRow({ agent, score, query }: { agent: Agent; score: number; query: string }) {
+function ResultCard({ agent, score }: { agent: Agent; score: number }) {
   const category = getCategoryById(agent.category_id);
-  const reason = agent.capabilities.slice(0, 2).join(" + ") || agent.tools.slice(0, 2).join(" + ") || category?.name || "matches your request";
-  const match = Math.min(98, Math.max(72, Math.round(score * 5 + 68)));
+  const priceLabel = agent.pricing_type === "free" ? "Free" :
+    agent.pricing_type === "contact" ? "Contact" :
+    agent.pricing_type === "freemium" ? `From $${agent.pricing_amount}/mo` :
+    `$${agent.pricing_amount}/${agent.pricing_period === "monthly" ? "mo" : agent.pricing_period === "yearly" ? "yr" : "use"}`;
 
   return (
-    <Link href={`/agent/${agent.slug}`} className="group block rounded-[30px] bg-white p-5 shadow-sm ring-1 ring-black/[0.06] transition hover:-translate-y-1 hover:shadow-xl">
-      <div className="flex flex-col gap-4 sm:flex-row sm:items-start">
-        <AgentIcon name={agent.name} websiteUrl={agent.website_url} iconUrl={agent.icon_url} size="md" className="rounded-[18px]" />
-        <div className="min-w-0 flex-1">
-          <div className="flex flex-wrap items-center gap-2">
-            <h2 className="text-[20px] font-[820] tracking-[-0.035em] text-[#171411]">{agent.name}</h2>
-            {category && <span className="rounded-full bg-[#fff0e8] px-2.5 py-1 text-[11px] font-[760] text-[#a33d13]">{category.name}</span>}
-            <span className="rounded-full bg-[#f0ece5] px-2.5 py-1 text-[11px] font-[760] text-[#6c6258]">{getPriceLabel(agent)}</span>
+    <Link href={`/agent/${agent.slug}`} className="block group">
+      <div className="bg-[#0f1011] rounded-2xl p-5 border border-[rgba(255,255,255,0.05)] hover:border-[#5e6ad2]/30 transition-all">
+        <div className="flex items-start gap-4">
+          <AgentIcon name={agent.name} websiteUrl={agent.website_url} iconUrl={agent.icon_url} size="md" />
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2">
+              <h3 className="font-semibold text-white text-[15px] truncate">{agent.name}</h3>
+              {category && (
+                <span className="text-[11px] text-[#8a8f98] bg-white/5 px-2 py-0.5 rounded-full flex-shrink-0">
+                  {category.name}
+                </span>
+              )}
+            </div>
+            <p className="text-[13px] text-[#8a8f98] mt-1">{agent.tagline}</p>
+            <div className="flex flex-wrap gap-1.5 mt-2">
+              {agent.capabilities.slice(0, 3).map((cap) => (
+                <span key={cap} className="text-[11px] text-[#8a8f98] bg-white/5 px-2 py-0.5 rounded-full">{cap}</span>
+              ))}
+            </div>
+            <div className="flex items-center justify-between mt-3">
+              <span className="text-[12px] text-[#5e6ad2] font-medium">{priceLabel}</span>
+              <span className="text-[11px] text-[#62666d]">{Math.round((score / 50) * 100)}% match</span>
+            </div>
           </div>
-          <p className="mt-1 text-[14px] leading-6 text-[#6f675f]">{agent.tagline}</p>
-          <div className="mt-4 rounded-[20px] bg-[#fbf7ef] p-4">
-            <p className="text-[13px] font-[700] leading-5 text-[#2a241f]">
-              We have an app that does what you want{query ? ` for “${query}”` : ""}: <span className="text-[#ff6b35]">{reason}</span>.
-            </p>
-          </div>
-          <div className="mt-3 flex flex-wrap gap-2">
-            {agent.tools.slice(0, 3).map((tool) => <span key={tool} className="rounded-full bg-[#e8f8ed] px-2.5 py-1 text-[11px] font-[700] text-[#17673a]">{tool}</span>)}
-          </div>
-        </div>
-        <div className="rounded-[22px] bg-[#171411] px-4 py-3 text-center text-white sm:w-24">
-          <p className="text-[24px] font-[820] tracking-[-0.04em]">{match}%</p>
-          <p className="text-[11px] font-[650] text-white/60">fit</p>
         </div>
       </div>
     </Link>
   );
 }
 
+const exampleQueries = [
+  "automate customer support",
+  "write SEO blog posts",
+  "build a web app without coding",
+  "analyze sales data",
+  "generate marketing videos",
+  "learn math with AI tutor",
+  "automate bookkeeping",
+  "find research papers",
+];
+
 export default function DiscoverPage() {
-  const [query, setQuery] = useState(() => typeof window === "undefined" ? "" : new URLSearchParams(window.location.search).get("q") || "");
-  const [searched, setSearched] = useState(() => typeof window !== "undefined" && Boolean(new URLSearchParams(window.location.search).get("q")));
+  const [query, setQuery] = useState("");
+  const [results, setResults] = useState<{ agent: Agent; score: number }[]>([]);
+  const [searched, setSearched] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState<Filters>({});
   const [agents, setAgents] = useState<Agent[]>(staticAgents.filter((a) => a.status === "approved"));
@@ -90,102 +110,246 @@ export default function DiscoverPage() {
     }).catch(() => {});
   }, []);
 
-  const approved = agents;
-  const resultSet = useMemo(() => {
-    return approved
-      .map((agent) => ({ agent, score: scoreAgent(agent, query, filters) }))
-      .filter((item) => item.score > 0)
-      .sort((a, b) => b.score - a.score || Number(b.agent.featured) - Number(a.agent.featured))
-      .slice(0, searched ? 24 : 9);
-  }, [approved, query, filters, searched]);
+  const approvedAgents = agents;
+  const newest = [...approvedAgents].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()).slice(0, 6);
+  const topFree = approvedAgents.filter((a) => a.pricing_type === "free").sort((a, b) => a.name.localeCompare(b.name)).slice(0, 10);
+  const topPaid = approvedAgents.filter((a) => a.pricing_type !== "free").sort((a, b) => a.name.localeCompare(b.name)).slice(0, 10);
 
-  const activeFilterCount = Object.values(filters).filter(Boolean).length;
-  const categoryGroups = [...b2cCategories, ...b2bCategories.slice(0, 6)];
+  function handleSearch(q?: string) {
+    const searchQuery = q || query;
+    if (!searchQuery.trim()) return;
+    if (q) setQuery(q);
 
-  function runSearch(nextQuery?: string) {
-    const q = nextQuery ?? query;
-    setQuery(q);
-    setSearched(Boolean(q.trim()) || activeFilterCount > 0);
-    if (q.trim()) window.history.replaceState(null, "", `/discover?q=${encodeURIComponent(q)}`);
+    const scored = approvedAgents
+      .map((a) => ({ agent: a, score: scoreAgent(a, searchQuery, filters) }))
+      .filter((s) => s.score > 0)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 20);
+
+    setResults(scored);
+    setSearched(true);
   }
 
+  const activeFilterCount = Object.values(filters).filter(Boolean).length;
+
   return (
-    <div className="min-h-screen bg-[#fbfaf7] px-4 py-10 text-[#171411] sm:px-6">
-      <div className="mx-auto max-w-[1180px]">
-        <section className="rounded-[42px] bg-[#fff6ec] p-6 shadow-sm ring-1 ring-black/[0.06] sm:p-10">
-          <div className="max-w-3xl">
-            <p className="mb-3 inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 text-[12px] font-[760] text-[#a33d13] shadow-sm"><Sparkles className="h-3.5 w-3.5" /> Consumer app search</p>
-            <h1 className="text-[46px] font-[840] leading-[0.98] tracking-[-0.055em] sm:text-[68px]">Tell us what you want done.</h1>
-            <p className="mt-4 max-w-2xl text-[17px] leading-7 text-[#6c6258]">Skip categories if you want. Describe the outcome, and we’ll show apps that can handle it with simple reasons, price, tools, and detail pages.</p>
+    <div className="max-w-[1200px] mx-auto px-5 py-8">
+      {/* Search hero */}
+      <div className="mb-10">
+        <h1 className="text-3xl font-bold text-white mb-2">
+          Find the right agent
+        </h1>
+        <p className="text-[#8a8f98] mb-5">Describe what you need or browse {approvedAgents.length} agents across {categories.length} categories.</p>
+
+        <form onSubmit={(e) => { e.preventDefault(); handleSearch(); }}>
+          <div className="relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-[#8a8f98]" />
+            <input
+              type="text"
+              value={query}
+              onChange={(e) => { setQuery(e.target.value); if (!e.target.value) setSearched(false); }}
+              placeholder="Describe your task... e.g. 'automate customer support for my store'"
+              className="w-full h-14 pl-12 pr-28 bg-[#0f1011] rounded-2xl text-[15px] text-white placeholder:text-[#62666d] outline-none focus:ring-2 focus:ring-[#5e6ad2]/30 border border-[rgba(255,255,255,0.05)]"
+            />
+            <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1.5">
+              <button
+                type="button"
+                onClick={() => setShowFilters(!showFilters)}
+                className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${
+                  activeFilterCount > 0 ? "bg-[#5e6ad2]/15 text-[#5e6ad2]" : "bg-white/5 text-[#8a8f98] hover:text-white"
+                }`}
+              >
+                <SlidersHorizontal className="w-4 h-4" />
+              </button>
+              <button
+                type="submit"
+                className="bg-[#5e6ad2] text-white font-semibold px-4 h-10 rounded-xl text-sm hover:bg-[#6d78d5] transition-colors"
+              >
+                Find
+              </button>
+            </div>
           </div>
+        </form>
 
-          <form onSubmit={(e) => { e.preventDefault(); runSearch(); }} className="mt-8 rounded-[30px] bg-white p-2 shadow-[0_18px_60px_rgba(56,42,25,0.12)] ring-1 ring-black/[0.07] sm:flex">
-            <div className="flex min-h-14 flex-1 items-center gap-3 px-4">
-              <Search className="h-5 w-5 text-[#ff6b35]" />
-              <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="I want an app to help me budget without spreadsheets..." className="w-full bg-transparent text-[16px] font-[560] outline-none placeholder:text-[#a49a90]" />
+        {showFilters && (
+          <div className="mt-3 bg-[#0f1011] rounded-2xl p-4 border border-[rgba(255,255,255,0.05)]">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-sm font-medium text-white">Filters</span>
+              {activeFilterCount > 0 && (
+                <button onClick={() => { setFilters({}); }} className="text-xs text-[#5e6ad2] hover:underline">Clear all</button>
+              )}
             </div>
-            <div className="mt-2 flex gap-2 sm:mt-0">
-              <button type="button" onClick={() => setShowFilters(!showFilters)} className="inline-flex h-14 items-center gap-2 rounded-[24px] bg-[#f3f0ea] px-4 text-[14px] font-[760] text-[#5f554c]"><SlidersHorizontal className="h-4 w-4" /> Filter{activeFilterCount ? ` ${activeFilterCount}` : ""}</button>
-              <button className="h-14 flex-1 rounded-[24px] bg-[#171411] px-6 text-[15px] font-[780] text-white sm:flex-none">Find apps</button>
-            </div>
-          </form>
-
-          {showFilters && (
-            <div className="mt-4 grid gap-3 rounded-[26px] bg-white p-4 ring-1 ring-black/[0.06] md:grid-cols-3">
-              <select value={filters.category || ""} onChange={(e) => setFilters({ ...filters, category: e.target.value || undefined })} className="h-12 rounded-[18px] bg-[#fbf7ef] px-4 text-[14px] font-[650] outline-none">
-                <option value="">Any category</option>
-                {categories.map((c) => <option key={c.id} value={c.id}>{c.name}</option>)}
-              </select>
-              <select value={filters.pricing || ""} onChange={(e) => setFilters({ ...filters, pricing: e.target.value || undefined })} className="h-12 rounded-[18px] bg-[#fbf7ef] px-4 text-[14px] font-[650] outline-none">
-                <option value="">Any price</option>
-                <option value="free">Free</option>
-                <option value="freemium">Freemium</option>
-                <option value="paid">Paid</option>
-                <option value="contact">Contact</option>
-              </select>
-              <button onClick={() => { setFilters({}); setShowFilters(false); }} className="inline-flex h-12 items-center justify-center gap-2 rounded-[18px] bg-[#171411] px-4 text-[14px] font-[760] text-white"><X className="h-4 w-4" /> Clear filters</button>
-            </div>
-          )}
-
-          {!searched && (
-            <div className="mt-5 flex flex-wrap gap-2">
-              {examples.map((example) => <button key={example} onClick={() => runSearch(example)} className="rounded-full bg-white px-3 py-2 text-[12px] font-[680] text-[#6b625a] shadow-sm ring-1 ring-black/[0.05] transition hover:bg-[#171411] hover:text-white">{example}</button>)}
-            </div>
-          )}
-        </section>
-
-        {!searched && (
-          <section className="mt-10">
-            <div className="mb-5 flex items-end justify-between gap-4">
+            <div className="grid grid-cols-3 gap-3">
               <div>
-                <p className="text-[13px] font-[760] uppercase tracking-[0.14em] text-[#ff6b35]">Start with a category</p>
-                <h2 className="mt-1 text-[30px] font-[820] tracking-[-0.045em]">Each category page explains how to choose.</h2>
+                <label className="text-[11px] text-[#8a8f98] uppercase tracking-wider font-medium">Category</label>
+                <select
+                  value={filters.category || ""}
+                  onChange={(e) => setFilters({ ...filters, category: e.target.value || undefined })}
+                  className="w-full mt-1 h-9 px-3 bg-white/5 rounded-lg text-[13px] text-white border-none outline-none"
+                >
+                  <option value="">All</option>
+                  {categories.map((c) => (
+                    <option key={c.id} value={c.id}>{c.name}</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="text-[11px] text-[#8a8f98] uppercase tracking-wider font-medium">Pricing</label>
+                <select
+                  value={filters.pricing || ""}
+                  onChange={(e) => setFilters({ ...filters, pricing: e.target.value || undefined })}
+                  className="w-full mt-1 h-9 px-3 bg-white/5 rounded-lg text-[13px] text-white border-none outline-none"
+                >
+                  <option value="">Any</option>
+                  <option value="free">Free</option>
+                  <option value="freemium">Freemium</option>
+                  <option value="paid">Paid</option>
+                  <option value="contact">Contact Sales</option>
+                </select>
+              </div>
+              <div>
+                <label className="text-[11px] text-[#8a8f98] uppercase tracking-wider font-medium">Tool</label>
+                <input
+                  type="text"
+                  value={filters.tool || ""}
+                  onChange={(e) => setFilters({ ...filters, tool: e.target.value || undefined })}
+                  placeholder="e.g. Slack, API"
+                  className="w-full mt-1 h-9 px-3 bg-white/5 rounded-lg text-[13px] text-white placeholder:text-[#62666d] border-none outline-none"
+                />
               </div>
             </div>
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-              {categoryGroups.map((category) => <Link key={category.id} href={`/category/${category.slug}`} className="rounded-[24px] bg-white p-4 shadow-sm ring-1 ring-black/[0.06] transition hover:-translate-y-0.5 hover:shadow-md"><p className="text-[18px] font-[820]">{category.name}</p><p className="mt-1 text-[13px] leading-5 text-[#736a61]">{category.description}</p></Link>)}
-            </div>
-          </section>
+          </div>
         )}
 
-        <section className="mt-10">
-          <div className="mb-5 flex items-end justify-between gap-4">
-            <div>
-              <p className="text-[13px] font-[760] uppercase tracking-[0.14em] text-[#ff6b35]">{searched ? "Matched apps" : "Popular apps"}</p>
-              <h2 className="mt-1 text-[32px] font-[820] tracking-[-0.045em]">{searched ? `${resultSet.length} apps that may fit` : "Apps people compare first"}</h2>
-            </div>
+        {!searched && (
+          <div className="flex flex-wrap gap-2 mt-4">
+            {exampleQueries.map((eq) => (
+              <button
+                key={eq}
+                onClick={() => handleSearch(eq)}
+                className="text-[12px] text-[#8a8f98] bg-white/5 px-3 py-1.5 rounded-full hover:bg-[rgba(255,255,255,0.08)] hover:text-white transition-colors"
+              >
+                {eq}
+              </button>
+            ))}
           </div>
-          {searched ? (
-            <div className="space-y-4">
-              {resultSet.length === 0 ? <div className="rounded-[30px] bg-white p-10 text-center ring-1 ring-black/[0.06]"><p className="font-[700] text-[#6c6258]">No app matched that yet. Try a simpler phrase or browse categories.</p></div> : resultSet.map(({ agent, score }) => <ResultRow key={agent.id} agent={agent} score={score} query={query} />)}
+        )}
+      </div>
+
+      {/* Search results */}
+      {searched && (
+        <div className="mb-10">
+          <div className="flex items-center justify-between mb-4">
+            <p className="text-sm text-[#8a8f98]">
+              {results.length > 0 ? `${results.length} agents matched` : "No agents matched"}
+            </p>
+            <button onClick={() => { setSearched(false); setResults([]); setQuery(""); }} className="text-xs text-[#5e6ad2] hover:underline">
+              Clear search
+            </button>
+          </div>
+          {results.length === 0 ? (
+            <div className="text-center py-12 bg-[#0f1011] rounded-2xl border border-[rgba(255,255,255,0.05)]">
+              <p className="text-[#8a8f98]">No agents found. Try different words or browse categories below.</p>
             </div>
           ) : (
-            <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-              {resultSet.map(({ agent }) => <AgentCard key={agent.id} agent={agent} />)}
+            <div className="space-y-3">
+              {results.map(({ agent, score }) => (
+                <ResultCard key={agent.id} agent={agent} score={score} />
+              ))}
             </div>
           )}
+        </div>
+      )}
+
+      {/* B2B Categories */}
+      <section className="mb-10">
+        <div className="flex items-center gap-3 mb-4">
+          <span className="text-[12px] font-[510] text-[#5e6ad2] bg-[rgba(94,106,210,0.12)] px-2.5 py-1 rounded-[4px]">For Work</span>
+          <h2 className="text-[16px] font-[590] text-[#d0d6e0]">Business & Professional</h2>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+          {b2bCategories.map((cat) => {
+            const count = approvedAgents.filter((a) => a.category_id === cat.id).length;
+            return (
+              <Link
+                key={cat.id}
+                href={`/category/${cat.slug}`}
+                className="bg-[#0f1011] rounded-[8px] p-4 border border-[rgba(255,255,255,0.05)] hover:border-[rgba(255,255,255,0.08)] hover:bg-[#101112] transition-all duration-[0.16s]"
+              >
+                <CategoryIcon slug={cat.slug} />
+                <p className="font-[590] text-[13px] text-[#d0d6e0] mt-2 tracking-[-0.01em]">{cat.name}</p>
+                <p className="text-[11px] text-[#62666d] font-[510] mt-0.5">{count} agents</p>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* B2C Categories */}
+      <section className="mb-10">
+        <div className="flex items-center gap-3 mb-4">
+          <span className="text-[12px] font-[510] text-[#10b981] bg-[rgba(16,185,129,0.12)] px-2.5 py-1 rounded-[4px]">For Life</span>
+          <h2 className="text-[16px] font-[590] text-[#d0d6e0]">Personal & Everyday</h2>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+          {b2cCategories.map((cat) => {
+            const count = approvedAgents.filter((a) => a.category_id === cat.id).length;
+            return (
+              <Link
+                key={cat.id}
+                href={`/category/${cat.slug}`}
+                className="bg-[#0f1011] rounded-[8px] p-4 border border-[rgba(255,255,255,0.05)] hover:border-[rgba(255,255,255,0.08)] hover:bg-[#101112] transition-all duration-[0.16s]"
+              >
+                <CategoryIcon slug={cat.slug} />
+                <p className="font-[590] text-[13px] text-[#d0d6e0] mt-2 tracking-[-0.01em]">{cat.name}</p>
+                <p className="text-[11px] text-[#62666d] font-[510] mt-0.5">{count} agents</p>
+              </Link>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* Recently Added */}
+      <section className="mb-10">
+        <h2 className="text-xl font-bold text-white mb-4">Recently Added</h2>
+        <div className="grid grid-cols-3 md:grid-cols-6 gap-5">
+          {newest.map((agent) => (
+            <AgentCardGrid key={agent.id} agent={agent} />
+          ))}
+        </div>
+      </section>
+
+      {/* Top Free */}
+      {topFree.length > 0 && (
+        <section className="mb-10">
+          <h2 className="text-xl font-bold text-white mb-4">Top Free Agents</h2>
+          <div className="bg-[#0f1011] rounded-[20px] divide-y divide-white/5">
+            {topFree.map((agent, i) => (
+              <div key={agent.id} className="flex items-center gap-4 px-5 py-4">
+                <span className="text-lg font-bold text-[#62666d] w-6 text-center">{i + 1}</span>
+                <div className="flex-1">
+                  <AgentCard agent={agent} />
+                </div>
+              </div>
+            ))}
+          </div>
         </section>
-      </div>
+      )}
+
+      {/* Top Paid */}
+      <section className="mb-10">
+        <h2 className="text-xl font-bold text-white mb-4">Top Paid Agents</h2>
+        <div className="bg-[#0f1011] rounded-[20px] divide-y divide-white/5">
+          {topPaid.map((agent, i) => (
+            <div key={agent.id} className="flex items-center gap-4 px-5 py-4">
+              <span className="text-lg font-bold text-[#62666d] w-6 text-center">{i + 1}</span>
+              <div className="flex-1">
+                <AgentCard agent={agent} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
     </div>
   );
 }

@@ -5,41 +5,39 @@ import { usePathname } from "next/navigation";
 import { Search } from "lucide-react";
 
 const tabs = [
-  { name: "Apps", href: "/discover" },
-  { name: "Categories", href: "/#categories" },
-  { name: "Submit app", href: "/submit" },
+  { name: "Home", href: "/" },
+  { name: "Discover", href: "/discover" },
+  { name: "MCP", href: "/mcp" },
+  { name: "Developers", href: "/developers" },
 ];
 
 export function Header() {
   const pathname = usePathname();
 
   return (
-    <header className="sticky top-0 z-50 border-b border-black/5 bg-[#fbfaf7]/88 backdrop-blur-xl">
-      <div className="mx-auto max-w-[1180px] px-4 sm:px-6">
-        <div className="flex h-16 items-center justify-between">
-          <Link href="/" className="flex items-center gap-3">
+    <header className="sticky top-0 z-50 bg-[#08090a]/80 backdrop-blur-xl border-b border-[rgba(255,255,255,0.05)]">
+      <div className="max-w-[1200px] mx-auto px-5">
+        <div className="flex items-center justify-between h-12">
+          <Link href="/" className="flex items-center gap-2">
             <img
               src="https://res.cloudinary.com/djklousbo/image/upload/v1775356040/logo_agentstore.png_fmokea.jpg"
-              alt="App Store"
-              className="h-9 w-9 rounded-[11px] object-cover shadow-sm"
+              alt="Agent Store"
+              className="h-7 w-auto rounded-[4px]"
             />
-            <div className="leading-tight">
-              <span className="block text-[15px] font-[720] tracking-[-0.02em] text-[#171411]">App Store</span>
-              <span className="hidden text-[11px] font-[520] text-[#7b7369] sm:block">AI apps for real jobs</span>
-            </div>
+            <span className="font-medium text-[14px] text-[#f7f8f8] tracking-[-0.01em]">Agent Store</span>
           </Link>
 
-          <nav className="hidden items-center gap-1 md:flex">
+          <nav className="hidden md:flex items-center gap-0.5">
             {tabs.map((tab) => {
               const isActive = tab.href === "/" ? pathname === "/" : pathname.startsWith(tab.href);
               return (
                 <Link
                   key={tab.name}
                   href={tab.href}
-                  className={`rounded-full px-4 py-2 text-[13px] font-[620] transition ${
+                  className={`px-3 py-1.5 rounded-[5px] text-[13px] font-[510] transition-all duration-[0.16s] ${
                     isActive
-                      ? "bg-[#171411] text-white shadow-sm"
-                      : "text-[#6e665d] hover:bg-[#f0ece5] hover:text-[#171411]"
+                      ? "bg-[rgba(255,255,255,0.05)] text-[#f7f8f8]"
+                      : "text-[#8a8f98] hover:text-[#d0d6e0] hover:bg-[rgba(255,255,255,0.03)]"
                   }`}
                 >
                   {tab.name}
@@ -49,11 +47,10 @@ export function Header() {
           </nav>
 
           <Link
-            href="/discover"
-            className="inline-flex h-10 items-center gap-2 rounded-full bg-white px-4 text-[13px] font-[650] text-[#171411] shadow-sm ring-1 ring-black/[0.08] transition hover:-translate-y-0.5 hover:shadow-md"
+            href="/search"
+            className="w-8 h-8 rounded-[6px] bg-[rgba(255,255,255,0.03)] flex items-center justify-center hover:bg-[rgba(255,255,255,0.05)] transition-all duration-[0.16s]"
           >
-            <Search className="h-4 w-4 text-[#ff6b35]" />
-            Find an app
+            <Search className="w-3.5 h-3.5 text-[#8a8f98]" />
           </Link>
         </div>
       </div>
