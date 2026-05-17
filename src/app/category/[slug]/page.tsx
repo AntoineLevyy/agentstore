@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { categories, agents, getCategory } from "@/lib/data";
-import { AgentCard, AgentCardFeatured } from "@/components/AgentCard";
-import { ChevronRight, Zap, Target } from "lucide-react";
+import { AgentCard } from "@/components/AgentCard";
+import { ChevronRight, Target } from "lucide-react";
 import type { Metadata } from "next";
 
 const CATEGORY_ICONS: Record<string, string> = {
@@ -146,42 +146,21 @@ export default async function CategoryPage({ params }: { params: Promise<{ slug:
         </div>
       </section>
 
-      {/* Top picks */}
-      {topPicks.length > 0 && (
-        <section className="max-w-5xl mx-auto px-5 py-14">
-          <div className="flex items-center gap-2 mb-8">
-            <Zap className="w-5 h-5" style={{ color: catColor }} />
-            <h2 className="text-[22px] font-bold text-gray-900">Top picks — most autonomous</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {topPicks.map((agent) => (
-              <AgentCardFeatured key={agent.id} agent={agent} />
-            ))}
-          </div>
-        </section>
-      )}
-
-      {/* Divider between sections */}
-      {topPicks.length > 0 && (
-        <div className="max-w-5xl mx-auto px-5">
-          <div className="border-t border-gray-100" />
-        </div>
-      )}
-
-      {/* All apps in category */}
+      {/* All apps — top picks get a badge */}
       <section className="max-w-5xl mx-auto px-5 py-14">
         <div className="flex items-center gap-2 mb-8">
           <Target className="w-5 h-5 text-gray-600" />
           <h2 className="text-[22px] font-bold text-gray-900">
-            All {category.name} apps ({categoryAgents.length})
+            {category.name} apps ({categoryAgents.length})
           </h2>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {(topPicks.length > 0 ? restAgents : categoryAgents).map((agent) => (
-            <AgentCard key={agent.id} agent={agent} />
+          {/* Top picks first, then rest */}
+          {topPicks.map((agent) => (
+            <AgentCard key={agent.id} agent={agent} topPick />
           ))}
-          {topPicks.length > 0 && topPicks.map((agent) => (
-            <AgentCard key={`all-${agent.id}`} agent={agent} />
+          {restAgents.map((agent) => (
+            <AgentCard key={agent.id} agent={agent} />
           ))}
         </div>
       </section>

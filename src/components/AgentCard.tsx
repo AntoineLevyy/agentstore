@@ -41,7 +41,7 @@ function PricingPill({ pricing }: { pricing: string }) {
   return <span className="text-[11px] font-semibold text-gray-500 bg-gray-100 px-2.5 py-1 rounded-full">Paid</span>;
 }
 
-export function AgentCard({ agent }: { agent: Agent }) {
+export function AgentCard({ agent, topPick = false }: { agent: Agent; topPick?: boolean }) {
   const catColor = CATEGORY_COLORS[agent.categorySlug] || "#6366f1";
   const { rarity, label, bgClass } = getRarity(agent.agenticDepth);
   const isLegendary = rarity === "legendary";
@@ -76,8 +76,13 @@ export function AgentCard({ agent }: { agent: Agent }) {
             style={{ background: catColor }}
           />
 
-          {/* Rarity badge */}
-          <div className="absolute top-3 right-3">
+          {/* Badges */}
+          <div className="absolute top-3 right-3 flex items-center gap-1.5">
+            {topPick && (
+              <span className="text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-white text-gray-900 shadow-sm border border-gray-200/60">
+                Top pick
+              </span>
+            )}
             <span className={`text-[9px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full ${bgClass}`}>
               {label}
             </span>
