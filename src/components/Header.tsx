@@ -2,12 +2,11 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Search, Sparkles, Plus } from "lucide-react";
+import { Search, Plus } from "lucide-react";
 
 const tabs = [
   { name: "Discover", href: "/discover" },
   { name: "Categories", href: "/categories" },
-  { name: "Submit", href: "/submit" },
 ];
 
 export function Header() {
@@ -17,14 +16,18 @@ export function Header() {
     <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-black/[0.06]">
       <div className="max-w-6xl mx-auto px-5">
         <div className="flex items-center justify-between h-14">
-          <Link href="/" className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
-              <Sparkles className="w-4 h-4 text-white" />
-            </div>
-            <div className="flex items-baseline gap-1.5">
-              <span className="font-bold text-[15px] text-gray-900">every</span>
-              <span className="font-bold text-[15px] bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">ai app</span>
-            </div>
+          <Link href="/" className="flex items-center gap-2">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none" className="flex-shrink-0">
+              <rect width="28" height="28" rx="8" fill="url(#logo-grad)" />
+              <path d="M8 14h12M14 8v12M10 10l8 8M18 10l-8 8" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.9" />
+              <defs>
+                <linearGradient id="logo-grad" x1="0" y1="0" x2="28" y2="28">
+                  <stop stopColor="#6366f1" />
+                  <stop offset="1" stopColor="#a855f7" />
+                </linearGradient>
+              </defs>
+            </svg>
+            <span className="font-semibold text-[15px] text-gray-900 tracking-[-0.01em]">Every AI App</span>
           </Link>
 
           <nav className="hidden md:flex items-center gap-1">
@@ -37,7 +40,7 @@ export function Header() {
                   className={`px-3.5 py-2 rounded-lg text-[14px] font-medium transition-all duration-200 ${
                     isActive
                       ? "bg-indigo-50 text-indigo-700"
-                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-100"
+                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
                   }`}
                 >
                   {tab.name}
@@ -49,16 +52,16 @@ export function Header() {
           <div className="flex items-center gap-2">
             <Link
               href="/discover"
-              className="flex items-center gap-2 h-9 px-3.5 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
+              className="flex items-center gap-2 h-9 px-3.5 rounded-lg border border-gray-200 hover:border-gray-300 bg-white hover:bg-gray-50 transition-all"
             >
-              <Search className="w-4 h-4 text-gray-500" />
-              <span className="text-[13px] text-gray-500 hidden sm:inline">Search apps...</span>
+              <Search className="w-3.5 h-3.5 text-gray-400" />
+              <span className="text-[13px] text-gray-400 hidden sm:inline">Search...</span>
             </Link>
             <Link
               href="/submit"
-              className="hidden sm:flex items-center gap-1.5 h-9 px-3.5 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700 transition-colors text-[13px] font-medium"
+              className="hidden sm:flex items-center gap-1.5 h-9 px-3.5 rounded-lg bg-gray-900 text-white hover:bg-gray-800 transition-colors text-[13px] font-medium"
             >
-              <Plus className="w-3.5 h-3.5" /> Add app
+              <Plus className="w-3.5 h-3.5" /> Submit
             </Link>
           </div>
         </div>
