@@ -100,6 +100,23 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Newsletter CTA */}
+      <section className="max-w-4xl mx-auto px-5 pb-6">
+        <Link
+          href="/newsletter"
+          className="group flex items-center justify-between bg-white rounded-2xl px-6 py-4 shadow-[var(--shadow-card)] hover:shadow-[var(--shadow-card-hover)] border border-black/[0.04] transition-all duration-300 hover:-translate-y-0.5"
+        >
+          <div className="flex items-center gap-3">
+            <span className="text-lg">📬</span>
+            <p className="text-[14px] text-gray-600 font-medium">
+              <span className="text-gray-900 font-semibold">Get Agentstore Weekly:</span>{" "}
+              category teardowns of the consumer AI apps people may actually use.
+            </p>
+          </div>
+          <ArrowRight className="w-4 h-4 text-gray-300 group-hover:text-indigo-500 group-hover:translate-x-0.5 transition-all flex-shrink-0" />
+        </Link>
+      </section>
+
       {/* Staff Picks / Trending */}
       <section className="max-w-6xl mx-auto px-5 py-20">
         <div className="flex items-center justify-between mb-8">

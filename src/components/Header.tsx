@@ -9,6 +9,7 @@ import { SearchModal } from "./SearchModal";
 const tabs = [
   { name: "Discover", href: "/discover" },
   { name: "Categories", href: "/categories" },
+  { name: "Newsletter", href: "/newsletter" },
 ];
 
 export function Header() {
